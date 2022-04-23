@@ -1,1 +1,6 @@
 Version 2/
+Provider/Reddit/__pycache__/
+Provider/Reddit/reddit.json
+components/GraphicalElements/__pycache__/
+components/Post/__pycache__/
+tempconfig.json

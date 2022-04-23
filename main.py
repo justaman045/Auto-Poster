@@ -1,6 +1,7 @@
 import json
 import os
 import pymsgbox as pg
+import components.Post.Post
 
 try:
     with open("installedApps.json", 'r') as f:
@@ -39,7 +40,7 @@ def startTheBot():
     choice = pg.confirm(config["BotName"], config["BotName"],
                buttons=["Post", "App Management"])
     if choice == "Post":
-        print("Post")
+        components.Post.Post.Post()
         # Run the Postin Method 
     elif choice == "App Management":
         print("App Management")
