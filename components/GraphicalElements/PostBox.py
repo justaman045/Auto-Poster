@@ -16,7 +16,7 @@ def PostBox(title):
     Pos = StringVar()
 
     def GetImage():
-        pathOfImage = askopenfilename(filetypes=[(".jpg", ".png")])
+        pathOfImage = askopenfilename(filetypes=[("Select Images", ".png .jpg .jpeg")])
         PathOfImage.set(pathOfImage)
 
     def MoveToNext():

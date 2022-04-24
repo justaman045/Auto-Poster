@@ -47,6 +47,40 @@ def GetRedditSub(options: list):
     label.pack()
     root.mainloop()
 
+def PostOnReddit(title: str, subReddits: str, message: str, pathOfImage: str):
+    currentPath = os.getcwd()
+    pathDir = os.path.join("Provider", "Reddit")
+    os.chdir(pathDir)
+    with open("reddit.json", 'r') as f:
+        creds = json.load(f)
+    reddit = praw.Reddit(client_id=creds['client_id'],
+                         client_secret=creds['client_secret'],
+                         user_agent=creds['user_agent'],
+                         redirect_uri=creds['redirect_uri'],
+                         refresh_token=creds['refresh_token'])
+    for i in subReddits:
+        subreddit = reddit.subreddit(i)
+        reddit.validate_on_submit = True
+        with open("bannedSubreddits.txt", 'r') as f:
+            subreds = f.readlines()
+            if f"{i}\n" not in subreds:
+                try:
+                    if len(message) > 0:
+                        subreddit.submit(title, selftext=message)
+                    else:
+                        subreddit.submit_image(title, pathOfImage)
+                    print(f"Successfully Posted in {i}")
+                except:
+                    with open("bannedSubreddits.txt", "a") as f:
+                        f.write(f"{i}\n")
+            else:
+                print(f"Skipped Sub Reddit {i} because it is BlackListed")
+    os.chdir(currentPath)
 
-def Upload():
-    GetRedditSub(["Hello", "World"])
+
+def Upload(title: str, message: str, pathOfImage: str):
+    GetRedditSub(GetRedditTags())
+    subReddits = str(clip.paste()).split("+")[:-1]
+    PostOnReddit(title=title, subReddits=subReddits,
+                 message=message, pathOfImage=pathOfImage)
+    
