@@ -58,23 +58,30 @@ def PostOnReddit(title: str, subReddits: str, message: str, pathOfImage: str):
                          user_agent=creds['user_agent'],
                          redirect_uri=creds['redirect_uri'],
                          refresh_token=creds['refresh_token'])
+    try:
+        with open("bannedSubreddits.txt", 'r') as f:
+            pass
+    except FileNotFoundError:
+        with open("bannedSubreddits.txt", 'a') as f:
+            f.write("announcements")
+    finally:
+        with open("bannedSubreddits.txt", 'r') as f:
+            subreds = f.readlines()
     for i in subReddits:
         subreddit = reddit.subreddit(i)
         reddit.validate_on_submit = True
-        with open("bannedSubreddits.txt", 'r') as f:
-            subreds = f.readlines()
-            if f"{i}\n" not in subreds:
-                try:
-                    if len(message) > 0:
-                        subreddit.submit(title, selftext=message)
-                    else:
-                        subreddit.submit_image(title, pathOfImage)
-                    print(f"Successfully Posted in {i}")
-                except:
-                    with open("bannedSubreddits.txt", "a") as f:
-                        f.write(f"{i}\n")
-            else:
-                print(f"Skipped Sub Reddit {i} because it is BlackListed")
+        if f"{i}\n" not in subreds:
+            try:
+                if len(message) > 0:
+                    subreddit.submit(title, selftext=message)
+                else:
+                    subreddit.submit_image(title, pathOfImage)
+                print(f"Successfully Posted in {i}")
+            except:
+                with open("bannedSubreddits.txt", "a") as f:
+                    f.write(f"{i}\n")
+        else:
+            print(f"Skipped Sub Reddit {i} because it is BlackListed")
     os.chdir(currentPath)
 
 

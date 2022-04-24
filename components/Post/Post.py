@@ -26,7 +26,6 @@ def Post():
         Post, Image = GetPostandImage()
         PlatformsToUpload = GetPlatforms()
         PlatformsToUploadImages = GetPlatformsImages()
-        print(Image)
     except:
         exit()
     for i in PlatformsToUpload:

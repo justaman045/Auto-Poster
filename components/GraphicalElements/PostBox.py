@@ -25,6 +25,20 @@ def PostBox(title):
         clip.copy(f"{Pos.get()}+{PathOfImage.get()}")
         root.destroy()
 
+    def keyPressed(e):
+        Post = textbox.get(1.0, "end-1c")
+        if len(Post) <= 280:
+            stringData = f"You've got {280 - len(Post)} Charecters left"
+            labl3.config(text=stringData)
+            try:
+                btn3.config(state='normal')
+            except:
+                pass
+        else:
+            btn3.config(state='disabled')
+            stringData = f"You've exceeded {len(Post) - 280} Charecters. Please Remove {len(Post) - 280} Charecters"
+            labl3.config(text=stringData)
+
     labl = Label(root, text=f"{title} in the below TextBox")
     labl.config(font=("Courier", 12))
     labl.place(x=80, y=20)
@@ -39,8 +53,13 @@ def PostBox(title):
     labl.config(font=("Courier", 11))
     labl.place(x=115, y=325)
 
-    btn = Button(root, text="Next", command=MoveToNext)
-    btn.place(x=100, y=400)
+    labl3 = Label(root, text=f"You've got 280 Charecters left")
+    labl3.config(font=("Courier", 11))
+    labl3.place(x=90, y=375)
+    textbox.bind('<KeyPress>', keyPressed)
+
+    btn3 = Button(root, text="Next", command=MoveToNext)
+    btn3.place(x=225, y=430)
 
     root.mainloop()
 
@@ -142,4 +161,4 @@ def PlatformsToUploadImages():
 
     root.mainloop()
 
-# PlatformsToUpload()
+# PostBox("Hello")
