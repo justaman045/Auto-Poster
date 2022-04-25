@@ -1,5 +1,8 @@
 import json
 from tkinter import *
+import pymsgbox as pg
+
+from Provider.Reddit.Reddit import CreateRedditConfig, DeleteRedditConfig
 
 def getApps():
 
@@ -8,9 +11,36 @@ def getApps():
     tempPlace = 1
     tempPlacee = 0
 
+    def CreateAppConfig(App):
+        if App == 'Reddit':
+            return CreateRedditConfig()
+
+    def DeleteAppConfig(App):
+        if App == 'Reddit':
+            return DeleteRedditConfig()
+
     def CreateConfig(AppName):
-        if AppName == 'Twitter':
-            print("Twitter")
+        if Apps[AppName]["installed"] == "Yes":
+            choice = pg.confirm(f"This will Uninstall {AppName} and Clear all the Application Keys and API's\n\nAre you sure??", f"Uninstall {AppName}", buttons=["Uninstall", "Don't Uninstall"])
+            if choice == "Uninstall":
+                res = DeleteAppConfig(AppName)
+                if res == "Done":
+                    Apps[AppName]["installed"] = "NO"
+                    with open("installedApps.json", 'w') as f:
+                        json.dump(Apps, f, indent=4)
+                else:
+                    exit()
+            else:
+                pg.alert(f"{AppName} hasn't been Uninstalled and you can still use it.", "UnInstall Aborted")
+        elif Apps[i]["installed"] == "NO":
+            res = CreateAppConfig(AppName)
+            if res == "Done":
+                Apps[AppName]["installed"] = "Yes"
+                with open("installedApps.json", 'w') as f:
+                    json.dump(Apps, f, indent=4)
+            else:
+                exit()
+        root.destroy()
 
 
     root = Tk()
@@ -29,9 +59,14 @@ def getApps():
     for i in Apps:
         AppLabel = Label(frame, text=i, height=5)
         AppLabel.grid()
-        Labelf = Label(frame, text="Some Deatils")
+        Labelf = Message(frame, text=Apps[i]["Detail"], width=300)
         Labelf.grid(row=tempPlace, padx=5)
-        Button(frame, command=lambda m=i: CreateConfig(m), text="Install").grid(row=tempPlacee, column=1, padx=350)
+        if Apps[i]["installed"] == 'NO':
+            Button(frame, command=lambda m=i: CreateConfig(m),
+                   text="Install").grid(row=tempPlacee, column=1, padx=130)
+        elif Apps[i]["installed"] == "Yes":
+            Button(frame, command=lambda m=i: CreateConfig(m),
+                   text="Uninstall").grid(row=tempPlacee, column=1, padx=130)
         tempPlace += 2
         tempPlacee += 2
 
@@ -46,4 +81,4 @@ def getApps():
 
     root.mainloop()
 
-getApps()
+# getApps()

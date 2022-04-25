@@ -39,6 +39,25 @@ def PostBox(title):
             stringData = f"You've exceeded {len(Post) - 280} Charecters. Please Remove {len(Post) - 280} Charecters"
             labl3.config(text=stringData)
 
+    InstalledApps = []
+    with open("installedApps.json", 'r') as f:
+        Apps = json.load(f)
+    with open("config.json", 'r') as f:
+        config = json.load(f)
+
+    for i in Apps:
+        if str(Apps[i]["installed"]) == "Yes":
+            InstalledApps.append(i)
+    optionCheckBox = {}
+
+    if len(InstalledApps) == 0:
+        pg.alert(
+            "None of the Apps are Installed.\n\nInstall Some Apps via App Management", config["BotName"])
+        exit()
+    else:
+        for i in InstalledApps:
+            optionCheckBox[f"{i}"] = IntVar()
+
     labl = Label(root, text=f"{title} in the below TextBox")
     labl.config(font=("Courier", 12))
     labl.place(x=80, y=20)
@@ -85,7 +104,7 @@ def PlatformsToUpload():
         config = json.load(f)
 
     for i in Apps:
-        if str(Apps[i]) == "Yes":
+        if str(Apps[i]["installed"]) == "Yes":
             InstalledApps.append(i)
     optionCheckBox = {}
 
@@ -135,7 +154,7 @@ def PlatformsToUploadImages():
         config = json.load(f)
 
     for i in Apps:
-        if str(Apps[i]) == "Yes":
+        if str(Apps[i]["installed"]) == "Yes":
             InstalledApps.append(i)
     optionCheckBox = {}
 
