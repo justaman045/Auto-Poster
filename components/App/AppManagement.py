@@ -2,7 +2,7 @@ import json
 from tkinter import *
 import pymsgbox as pg
 
-from Provider.Reddit.Reddit import CreateRedditConfig, DeleteRedditConfig
+# from Provider.Reddit.Reddit import CreateRedditConfig, DeleteRedditConfig
 
 def getApps():
 
@@ -13,11 +13,13 @@ def getApps():
 
     def CreateAppConfig(App):
         if App == 'Reddit':
-            return CreateRedditConfig()
+            pass
+            # return CreateRedditConfig()
 
     def DeleteAppConfig(App):
         if App == 'Reddit':
-            return DeleteRedditConfig()
+            pass
+            # return DeleteRedditConfig()
 
     def CreateConfig(AppName):
         if Apps[AppName]["installed"] == "Yes":
@@ -63,14 +65,16 @@ def getApps():
         Labelf.grid(row=tempPlace, padx=5)
         if Apps[i]["installed"] == 'NO':
             Button(frame, command=lambda m=i: CreateConfig(m),
-                   text="Install").grid(row=tempPlacee, column=1, padx=130)
+                   text="Install with Guide").grid(row=tempPlacee, column=1, padx=[90, 0])
+            Button(frame, command=lambda m=i: CreateConfig(m),
+                   text="Install").grid(row=tempPlacee, column=2)
         elif Apps[i]["installed"] == "Yes":
             Button(frame, command=lambda m=i: CreateConfig(m),
-                   text="Uninstall").grid(row=tempPlacee, column=1, padx=130)
+                   text="Uninstall").grid(row=tempPlacee, column=2)
         tempPlace += 2
         tempPlacee += 2
 
-    canvas.create_window(0, 0, anchor='nw', window=frame, width=500)
+    canvas.create_window(0, 0, anchor='nw', window=frame, width=600)
     canvas.update_idletasks()
     canvas.configure(scrollregion=canvas.bbox('all'),
                     yscrollcommand=scroll_y.set)
@@ -81,4 +85,4 @@ def getApps():
 
     root.mainloop()
 
-# getApps()
+getApps()
