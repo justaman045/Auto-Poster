@@ -2,7 +2,8 @@ import json
 from tkinter import *
 import pymsgbox as pg
 
-# from Provider.Reddit.Reddit import CreateRedditConfig, DeleteRedditConfig
+from Provider.Reddit.Reddit import CreateRedditConfig, DeleteRedditConfig
+from Provider.Twitter.Twitter import APISetup, InstallTwitter, UnInstallTwitter
 
 def getApps():
 
@@ -11,15 +12,28 @@ def getApps():
     tempPlace = 1
     tempPlacee = 0
 
+    def GuidedInstall(AppName):
+        if AppName == 'Twitter':
+            # pass
+            APISetup()
+            return InstallTwitter()
+
     def CreateAppConfig(App):
+        print(App)
         if App == 'Reddit':
-            pass
-            # return CreateRedditConfig()
+            # pass
+            return CreateRedditConfig()
+        if App == 'Twitter':
+            # pass
+            return InstallTwitter()
 
     def DeleteAppConfig(App):
         if App == 'Reddit':
-            pass
-            # return DeleteRedditConfig()
+            # pass
+            return DeleteRedditConfig()
+        if App == 'Twitter':
+            # pass
+            return UnInstallTwitter()
 
     def CreateConfig(AppName):
         if Apps[AppName]["installed"] == "Yes":
@@ -64,7 +78,7 @@ def getApps():
         Labelf = Message(frame, text=Apps[i]["Detail"], width=300)
         Labelf.grid(row=tempPlace, padx=5)
         if Apps[i]["installed"] == 'NO':
-            Button(frame, command=lambda m=i: CreateConfig(m),
+            Button(frame, command=lambda m=i: GuidedInstall(m),
                    text="Install with Guide").grid(row=tempPlacee, column=1, padx=[90, 0])
             Button(frame, command=lambda m=i: CreateConfig(m),
                    text="Install").grid(row=tempPlacee, column=2)
@@ -85,4 +99,4 @@ def getApps():
 
     root.mainloop()
 
-getApps()
+# getApps()

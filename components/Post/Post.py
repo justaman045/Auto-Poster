@@ -1,7 +1,10 @@
 from email import message
+import json
+import os
 import pyperclip as clip
 from Provider.Reddit.Reddit import Upload
 import pymsgbox as pg
+from Provider.Twitter.Twitter import AddHashtags, UploadToTwitter
 
 from components.GraphicalElements.PostBox import PlatformsToUpload, PlatformsToUploadImages, PostBox
 
@@ -25,13 +28,16 @@ def Post():
     try:
         Post, Image = GetPostandImage()
         PlatformsToUpload = GetPlatforms()
-        PlatformsToUploadImages = GetPlatformsImages()
+        if Image == "":
+            PlatformsToUploadImagess = []
+        else:
+            PlatformsToUploadImagess = GetPlatformsImages()
     except:
         exit()
     for i in PlatformsToUpload:
         if i == "Reddit":
             title = pg.prompt("Enter the Title for Reddit", "Enter the title for Reddit")
-            if "Reddit" in PlatformsToUploadImages:
+            if "Reddit" in PlatformsToUploadImagess:
                 if len(Post) != 0 and Image != "":
                     choice = pg.confirm("Can't Upload Image and Post at same time on Reddit ( Beyond the Rules of Reddit )", "Error", buttons=[
                                         "Disable Post Text", "Disable Image Upload"])
@@ -42,4 +48,8 @@ def Post():
             else:
                 Upload(title=title, message=Post, pathOfImage="")
         if i == "Twitter":
-            print("Twitter")
+            if len(Post) < 270:
+                TwitterPost = AddHashtags(Post)
+            else:
+                TwitterPost = Post
+            UploadToTwitter(TwitterPost, Image)

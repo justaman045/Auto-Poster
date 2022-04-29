@@ -14,29 +14,9 @@ except FileNotFoundError:
                 "installed": "NO",
                 "Detail": "Post on Reddit a Social Media Platform based on sub-reddits ( Communities ) without even opening Reddit"
             },
-            "Instagram": {
-                "installed": "NO",
-                "Detail": "Post on Instagram a Social Media Platform with a Image and captions ( Post )"
-            },
-            "SnapChat": {
-                "installed": "NO",
-                "Detail": "Post on Snapchat a Social Media Platform this will basically upload a new Snap"
-            },
             "Twitter": {
                 "installed": "NO",
                 "Detail": "Post on Twitter a Social Media Platform will just tweet."
-            },
-            "Facebook": {
-                "installed": "NO",
-                "Detail": "Post on Facebook a Social Media Platform will Post a Text on a desired Page with Image ( Optional )"
-            },
-            "Discord": {
-                "installed": "NO",
-                "Detail": "Post on Discord a Social Media Platform for Gamers"
-            },
-            "Telegram": {
-                "installed": "NO",
-                "Detail": "Post on Telegram a Social Media Platform on a particular Channel"
             },
         }
         json.dump(dataSet, f, indent=4)
