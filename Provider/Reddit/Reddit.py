@@ -95,17 +95,23 @@ def Upload(title: str, message: str, pathOfImage: str):
     subReddits = str(clip.paste()).split("+")[:-1]
     PostOnReddit(title=title, subReddits=subReddits,
                  message=message, pathOfImage=pathOfImage)
+
+def RedditGuideToInstall():
+    pg.alert("Create a New App from Reddit Apps Dashboard for this particular BOT.\n\nThe Link for that is https://www.reddit.com/prefs/apps", "Creating Reddit App")
+    pg.alert("Your App Configuration should match something like this.\n\nApp type : Script\nAbout URL : http://localhost:8080\nredirect URI : http://localhost:8080", "Creating Reddit App")
+
     
 def CreateRedditConfig():
-    pg.alert("Create a New App from Reddit Apps Dashboard for this particular BOT.\n\nThe Link for that is https://www.reddit.com/prefs/apps", "Creating Reddit App")
     currentPath = os.getcwd()
     with open('config.json', 'r') as f:
         config = json.load(f)
     pathDir = os.path.join("Provider", "Reddit")
-    os.chdir(pathDir)
-    pg.alert("Your App Configuration should match something like this.\n\nApp type : Script\nAbout URL : http://localhost:8080\nredirect URI : http://localhost:8080", "Creating Reddit App")
     clientID = pg.prompt("Enter the Client ID ( Which is just below the Bot Name on Reddit Dev Dashboard )", "Collecting Client ID")
+    if clientID == None:
+        exit()
     clientSecret = pg.prompt("Enter the Client Secret", "Collecting Client Secret")
+    if clientSecret == None:
+        exit()
     refreshToken = main(clientID, clientSecret)
     if refreshToken != 1:
         dataSet = {
@@ -115,6 +121,7 @@ def CreateRedditConfig():
             "redirect_uri": "http://localhost:8080",
             "refresh_token": refreshToken
         }
+        os.chdir(pathDir)
         with open("reddit.json", 'w') as f:
             json.dump(dataSet, f, indent=4)
         os.chdir(currentPath)

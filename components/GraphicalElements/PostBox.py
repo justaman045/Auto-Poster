@@ -180,4 +180,47 @@ def PlatformsToUploadImages():
 
     root.mainloop()
 
-# PostBox("Hello")
+
+def MultiPurposeOptionBox(title, options, ErrorMsg):
+    root = Tk()
+    root.geometry("500x500")
+    root.title(title)
+    root.resizable(width=False, height=False)
+
+    def MoveToNext():
+        AllPlatformsSelected = ""
+        for key, value in optionCheckBox.items():
+            val = value.get()
+            if val != 0:
+                AllPlatformsSelected += f"{key}+"
+        clip.copy(AllPlatformsSelected)
+        root.destroy()
+
+    InstalledApps = []
+    with open("config.json", 'r') as f:
+        config = json.load(f)
+
+    for i in options:
+        InstalledApps.append(i)
+    optionCheckBox = {}
+
+    if len(InstalledApps) == 0:
+        pg.alert(
+            ErrorMsg, config["BotName"])
+        exit()
+    else:
+        for i in InstalledApps:
+            optionCheckBox[f"{i}"] = IntVar()
+
+    text = ScrolledText(root, width=60, height=15)
+    text.place(x=8, y=60)
+    for key, value in optionCheckBox.items():
+        text.window_create('end', window=Checkbutton(text=key, variable=value))
+
+    btn = Button(root, text="Post", command=MoveToNext)
+    btn.place(x=225, y=325)
+
+    root.mainloop()
+
+
+# MultiPurposeOptionBox("Hello")

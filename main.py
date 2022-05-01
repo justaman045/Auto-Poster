@@ -18,6 +18,10 @@ except FileNotFoundError:
                 "installed": "NO",
                 "Detail": "Post on Twitter a Social Media Platform will just tweet."
             },
+            "Discord": {
+                "installed": "NO",
+                "Detail": "Send Messages to Discord using this Bot with ease"
+            },
         }
         json.dump(dataSet, f, indent=4)
 finally:
@@ -40,7 +44,7 @@ finally:
 
 def startTheBot():
     choice = pg.confirm(config["BotName"], config["BotName"],
-               buttons=["Post", "App Management", "Contacts"])
+               buttons=["Post", "App Management", "Promote"])
     if choice == "Post":
         components.Post.Post.Post()
         # Run the Postin Method 
@@ -50,6 +54,8 @@ def startTheBot():
         finally:
             startTheBot()
         # Run the App Management
+    elif choice == 'Promote':
+        pass
     else:
         exit()
 

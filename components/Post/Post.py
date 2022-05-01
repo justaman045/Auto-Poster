@@ -2,6 +2,7 @@ from email import message
 import json
 import os
 import pyperclip as clip
+from Provider.Discord.Discord import sendDiscordMessage
 from Provider.Reddit.Reddit import Upload
 import pymsgbox as pg
 from Provider.Twitter.Twitter import AddHashtags, UploadToTwitter
@@ -53,3 +54,5 @@ def Post():
             else:
                 TwitterPost = Post
             UploadToTwitter(TwitterPost, Image)
+        if i == 'Discord':
+            sendDiscordMessage(Post)
