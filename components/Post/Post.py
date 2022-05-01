@@ -28,31 +28,37 @@ def GetPlatformsImages():
 def Post():
     try:
         Post, Image = GetPostandImage()
-        PlatformsToUpload = GetPlatforms()
+        PlatformsToUploads = GetPlatforms()
         if Image == "":
             PlatformsToUploadImagess = []
         else:
             PlatformsToUploadImagess = GetPlatformsImages()
     except:
         exit()
-    for i in PlatformsToUpload:
+    finally:
+        PostOnSocials(Post, Image, PlatformsToUploadImagess, PlatformsToUploads)
+    
+
+def PostOnSocials(Message, LocationOfImage, PlatformsToUploadImagess, PlatformsToUploads):
+    for i in PlatformsToUploads:
         if i == "Reddit":
-            title = pg.prompt("Enter the Title for Reddit", "Enter the title for Reddit")
+            title = pg.prompt("Enter the Title for Reddit",
+                              "Enter the title for Reddit")
             if "Reddit" in PlatformsToUploadImagess:
-                if len(Post) != 0 and Image != "":
+                if len(Message) != 0 and LocationOfImage != "":
                     choice = pg.confirm("Can't Upload Image and Post at same time on Reddit ( Beyond the Rules of Reddit )", "Error", buttons=[
                                         "Disable Post Text", "Disable Image Upload"])
                     if choice == "Disable Post Text":
-                        Upload(title=title, message="", pathOfImage=Image)
+                        Upload(title=title, message="", pathOfImage=LocationOfImage)
                     elif choice == "Disable Image Upload":
-                        Upload(title=title, message=Post, pathOfImage="")
+                        Upload(title=title, message=Message, pathOfImage="")
             else:
-                Upload(title=title, message=Post, pathOfImage="")
+                Upload(title=title, message=Message, pathOfImage="")
         if i == "Twitter":
-            if len(Post) < 270:
-                TwitterPost = AddHashtags(Post)
+            if len(Message) < 270:
+                TwitterPost = AddHashtags(Message)
             else:
-                TwitterPost = Post
-            UploadToTwitter(TwitterPost, Image)
+                TwitterPost = Message
+            UploadToTwitter(TwitterPost, LocationOfImage)
         if i == 'Discord':
-            sendDiscordMessage(Post)
+            sendDiscordMessage(Message)
