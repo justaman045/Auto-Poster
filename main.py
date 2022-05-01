@@ -40,7 +40,7 @@ finally:
 
 def startTheBot():
     choice = pg.confirm(config["BotName"], config["BotName"],
-               buttons=["Post", "App Management"])
+               buttons=["Post", "App Management", "Contacts"])
     if choice == "Post":
         components.Post.Post.Post()
         # Run the Postin Method 

@@ -217,4 +217,3 @@ def DeleteRedditConfig():
     return "Done"
 
 
-# main("H16YRr4yoRokEXkib96_cg", "rTD0tzRFMAcwRmXdF4b8NOkYToEGuQ")

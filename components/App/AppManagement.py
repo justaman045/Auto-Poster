@@ -1,5 +1,6 @@
 import json
 from tkinter import *
+from numpy import pad
 import pymsgbox as pg
 
 from Provider.Reddit.Reddit import CreateRedditConfig, DeleteRedditConfig
@@ -79,7 +80,7 @@ def getApps():
         Labelf.grid(row=tempPlace, padx=5)
         if Apps[i]["installed"] == 'NO':
             Button(frame, command=lambda m=i: GuidedInstall(m),
-                   text="Install with Guide").grid(row=tempPlacee, column=1, padx=[90, 0])
+                   text="Install with Guide").grid(row=tempPlacee, column=1, padx=(90, 0))
             Button(frame, command=lambda m=i: CreateConfig(m),
                    text="Install").grid(row=tempPlacee, column=2)
         elif Apps[i]["installed"] == "Yes":
