@@ -1,6 +1,4 @@
-from email import message
 import json
-import os
 import pyperclip as clip
 from Provider.Discord.Discord import sendDiscordMessage
 from Provider.Reddit.Reddit import Upload
@@ -8,6 +6,9 @@ import pymsgbox as pg
 from Provider.Twitter.Twitter import AddHashtags, UploadToTwitter
 
 from components.GraphicalElements.PostBox import PlatformsToUpload, PlatformsToUploadImages, PostBox
+
+with open("config.json", 'r') as f:
+    config = json.load(f)
 
 def GetPostandImage():
     PostBox("Enter Your Post")
@@ -40,25 +41,39 @@ def Post():
     
 
 def PostOnSocials(Message, LocationOfImage, PlatformsToUploadImagess, PlatformsToUploads):
-    for i in PlatformsToUploads:
-        if i == "Reddit":
-            title = pg.prompt("Enter the Title for Reddit",
-                              "Enter the title for Reddit")
-            if "Reddit" in PlatformsToUploadImagess:
-                if len(Message) != 0 and LocationOfImage != "":
-                    choice = pg.confirm("Can't Upload Image and Post at same time on Reddit ( Beyond the Rules of Reddit )", "Error", buttons=[
-                                        "Disable Post Text", "Disable Image Upload"])
-                    if choice == "Disable Post Text":
-                        Upload(title=title, message="", pathOfImage=LocationOfImage)
-                    elif choice == "Disable Image Upload":
-                        Upload(title=title, message=Message, pathOfImage="")
-            else:
-                Upload(title=title, message=Message, pathOfImage="")
-        if i == "Twitter":
-            if len(Message) < 270:
-                TwitterPost = AddHashtags(Message)
-            else:
-                TwitterPost = Message
+    toUpload = []
+    try:
+        for i in PlatformsToUploads:
+            if i == "Reddit":
+                title = pg.prompt("Enter the Title for Reddit",
+                                "Enter the title for Reddit")
+                if "Reddit" in PlatformsToUploadImagess:
+                    if len(Message) != 0 and LocationOfImage != "":
+                        choice = pg.confirm("Can't Upload Image and Post at same time on Reddit ( Beyond the Rules of Reddit )", "Error", buttons=[
+                                            "Disable Post Text", "Disable Image Upload"])
+                        if choice == "Disable Post Text":
+                            toUpload.append(f'{i}DPT')
+                        elif choice == "Disable Image Upload":
+                            toUpload.append(f'{i}DIU')
+                else:
+                    toUpload.append(f'{i}NI')
+            if i == "Twitter":
+                if len(Message) < 270:
+                    TwitterPost = AddHashtags(Message)
+                else:
+                    TwitterPost = Message
+                toUpload.append(i)
+            if i == 'Discord':
+                toUpload.append(i)
+    finally:
+        pg.alert(
+            "Sucessfully Uploaded the Tweet/Status to every Playform", config["BotName"])
+        if "Twitter" in toUpload:
             UploadToTwitter(TwitterPost, LocationOfImage)
-        if i == 'Discord':
+        if "Discord" in toUpload:
             sendDiscordMessage(Message)
+        if "RedditDPT" in toUpload:
+            Upload(title=title, message="",
+                   pathOfImage=LocationOfImage)
+        if "RedditDIU" in toUpload or "RedditNI" in toUpload:
+            Upload(title=title, message=Message, pathOfImage="")

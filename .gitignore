@@ -12,3 +12,4 @@ Telegram.py
 Instagram.py
 *.dtc
 test.*
+*.db

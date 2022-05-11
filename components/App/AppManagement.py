@@ -1,4 +1,5 @@
 import json
+import sqlite3
 from tkinter import *
 from numpy import pad
 import pymsgbox as pg
@@ -11,6 +12,9 @@ def getApps():
 
     with open("installedApps.json", 'r') as f:
         Apps = json.load(f)
+    # connection = sqlite3.connect('AutoPoster.db')
+    # cursor = connection.cursor()
+    # Apps2 = cursor.execute('select * from Apps').fetchall()
     tempPlace = 1
     tempPlacee = 0
 
