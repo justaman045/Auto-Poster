@@ -4,6 +4,8 @@ import pymsgbox as pg
 from components.App.AppManagement import getApps
 import components.Post.Post
 
+BotVersion = '1.1.4'
+
 try:
     with open("installedApps.json", 'r') as f:
         pass
@@ -35,7 +37,7 @@ except FileNotFoundError:
     with open("config.json", 'a') as f:
         dataSet = {
             "BotName": BotName,
-            "version": 2.0
+            "version": BotVersion
         }
         json.dump(dataSet, f, indent=4)
 finally:

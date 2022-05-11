@@ -2,7 +2,7 @@ import json
 from tkinter import *
 from numpy import pad
 import pymsgbox as pg
-from Provider.Discord.Discord import GuidedInstallDiscord, createDiscordConfig
+from Provider.Discord.Discord import GuidedInstallDiscord, createDiscordConfig, deleteDiscordConfig
 
 from Provider.Reddit.Reddit import CreateRedditConfig, DeleteRedditConfig, RedditGuideToInstall
 from Provider.Twitter.Twitter import APISetup, InstallTwitter, UnInstallTwitter
@@ -43,6 +43,8 @@ def getApps():
         if App == 'Twitter':
             # pass
             return UnInstallTwitter()
+        if App == 'Discord':
+            return deleteDiscordConfig()
 
     def CreateConfig(AppName):
         if Apps[AppName]["installed"] == "Yes":

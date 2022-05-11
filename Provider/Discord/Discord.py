@@ -85,6 +85,7 @@ def deleteDiscordConfig():
     with open('authorization.dtc', 'w') as f:
         f.write("")
     os.chdir(currentPath)
+    return 'Done'
 
 def GuidedInstallDiscord():
     with open("config.json", 'r') as f:
