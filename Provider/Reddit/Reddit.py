@@ -2,6 +2,7 @@ import json
 import os
 import random
 import socket
+import sqlite3
 import sys
 import webbrowser
 import pyperclip as clip
@@ -102,10 +103,9 @@ def RedditGuideToInstall():
 
     
 def CreateRedditConfig():
-    currentPath = os.getcwd()
-    with open('config.json', 'r') as f:
-        config = json.load(f)
-    pathDir = os.path.join("Provider", "Reddit")
+    connection = sqlite3.connect('AutoPoster.db')
+    cursor = connection.cursor()
+    config = cursor.execute('select * from "Bot Config"').fetchall()[0]
     clientID = pg.prompt("Enter the Client ID ( Which is just below the Bot Name on Reddit Dev Dashboard )", "Collecting Client ID")
     if clientID == None:
         exit()
@@ -114,22 +114,14 @@ def CreateRedditConfig():
         exit()
     refreshToken = main(clientID, clientSecret)
     if refreshToken != 1:
-        dataSet = {
-            "client_id": clientID,
-            "client_secret": clientSecret,
-            "user_agent": config["BotName"],
-            "redirect_uri": "http://localhost:8080",
-            "refresh_token": refreshToken
-        }
-        os.chdir(pathDir)
-        with open("reddit.json", 'w') as f:
-            json.dump(dataSet, f, indent=4)
-        os.chdir(currentPath)
+        cursor.execute(f'create table if not exists Reddit ( ClientId VarChar2, ClientSecret VarChar2, UserAgent Text, redirectURI VarChar2, refreshToken VarChar2 )')
+        cursor.execute(
+            f'insert into Reddit values ( "{clientID}", "{clientSecret}", "{config[0]}", "http://localhost:8080", "{refreshToken}" )')
+        connection.commit()
         return "Done"
     else:
         pg.alert(
             "There was some Error in Authentication.\n\nPlease Try again", config["BotName"])
-        os.chdir(currentPath)
         return "Error"
 
 

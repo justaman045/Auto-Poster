@@ -10,11 +10,9 @@ from Provider.Twitter.Twitter import APISetup, InstallTwitter, UnInstallTwitter
 
 def getApps():
 
-    with open("installedApps.json", 'r') as f:
-        Apps = json.load(f)
-    # connection = sqlite3.connect('AutoPoster.db')
-    # cursor = connection.cursor()
-    # Apps2 = cursor.execute('select * from Apps').fetchall()
+    connection = sqlite3.connect('AutoPoster.db')
+    cursor = connection.cursor()
+    Apps = cursor.execute('select * from Apps').fetchall()
     tempPlace = 1
     tempPlacee = 0
 
@@ -51,27 +49,31 @@ def getApps():
             return deleteDiscordConfig()
 
     def CreateConfig(AppName):
-        if Apps[AppName]["installed"] == "Yes":
-            choice = pg.confirm(f"This will Uninstall {AppName} and Clear all the Application Keys and API's\n\nAre you sure??", f"Uninstall {AppName}", buttons=["Uninstall", "Don't Uninstall"])
-            if choice == "Uninstall":
-                res = DeleteAppConfig(AppName)
-                if res == "Done":
-                    Apps[AppName]["installed"] = "NO"
-                    with open("installedApps.json", 'w') as f:
-                        json.dump(Apps, f, indent=4)
-                else:
-                    exit()
-            else:
-                pg.alert(f"{AppName} hasn't been Uninstalled and you can still use it.", "UnInstall Aborted")
-        elif Apps[i]["installed"] == "NO":
-            res = CreateAppConfig(AppName)
-            if res == "Done":
-                Apps[AppName]["installed"] = "Yes"
-                with open("installedApps.json", 'w') as f:
-                    json.dump(Apps, f, indent=4)
-            else:
-                exit()
-        root.destroy()
+        # if Apps[AppName]["installed"] == "Yes":
+        #     choice = pg.confirm(f"This will Uninstall {AppName} and Clear all the Application Keys and API's\n\nAre you sure??", f"Uninstall {AppName}", buttons=["Uninstall", "Don't Uninstall"])
+        #     if choice == "Uninstall":
+        #         res = DeleteAppConfig(AppName)
+        #         if res == "Done":
+        #             Apps[AppName]["installed"] = "NO"
+        #             with open("installedApps.json", 'w') as f:
+        #                 json.dump(Apps, f, indent=4)
+        #         else:
+        #             exit()
+        #     else:
+        #         pg.alert(f"{AppName} hasn't been Uninstalled and you can still use it.", "UnInstall Aborted")
+        # elif Apps[AppName]["installed"] == "NO":
+        #     res = CreateAppConfig(AppName)
+        #     if res == "Done":
+        #         Apps[AppName]["installed"] = "Yes"
+        #         with open("installedApps.json", 'w') as f:
+        #             json.dump(Apps, f, indent=4)
+        #     else:
+        #         exit()
+        for App in Apps:
+            if App[0] == AppName:
+                if App[1] == 'No':
+                    CreateAppConfig(AppName)
+        # root.destroy()
 
 
     root = Tk()
@@ -87,18 +89,18 @@ def getApps():
     frame = Frame(canvas)
     scroll_y = Scrollbar(root, orient="vertical", command=canvas.yview)
 
-    for i in Apps:
-        AppLabel = Label(frame, text=i, height=5)
+    for App in Apps:
+        AppLabel = Label(frame, text=App[0], height=5)
         AppLabel.grid()
-        Labelf = Message(frame, text=Apps[i]["Detail"], width=300)
+        Labelf = Message(frame, text=App[2], width=300)
         Labelf.grid(row=tempPlace, padx=5)
-        if Apps[i]["installed"] == 'NO':
-            Button(frame, command=lambda m=i: GuidedInstall(m),
+        if App[1] == 'No':
+            Button(frame, command=lambda m=App[0]: GuidedInstall(m),
                    text="Install with Guide").grid(row=tempPlacee, column=1, padx=(90, 0))
-            Button(frame, command=lambda m=i: CreateConfig(m),
+            Button(frame, command=lambda m=App[0]: CreateConfig(m),
                    text="Install").grid(row=tempPlacee, column=2)
-        elif Apps[i]["installed"] == "Yes":
-            Button(frame, command=lambda m=i: CreateConfig(m),
+        elif App[1] == "Yes":
+            Button(frame, command=lambda m=App[0]: CreateConfig(m),
                    text="Uninstall").grid(row=tempPlacee, column=2)
         tempPlace += 2
         tempPlacee += 2
@@ -114,4 +116,4 @@ def getApps():
 
     root.mainloop()
 
-# getApps()
+getApps()
