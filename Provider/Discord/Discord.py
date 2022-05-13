@@ -1,5 +1,6 @@
 import json
 import os
+from tkinter.filedialog import askopenfilename
 from tkinter.scrolledtext import ScrolledText
 import requests, pymsgbox as pg
 from tkinter import *
@@ -8,15 +9,24 @@ import pyperclip as clip
 from components.GraphicalElements.PostBox import MultiPurposeOptionBox
 
 
-def sendMSG(message, authorization, channelID):
+def sendMSG(message, authorization, channelID, image):
     payload = {
         'content': message
     }
+    if image != "":
+        files = {
+            'file': (image, open(image, 'rb')),
+
+        }
     header = {
         "authorization": authorization
     }
-    r = requests.post(
-        f"https://discord.com/api/v9/channels/{channelID}/messages", headers=header, data=payload)
+    if image != "":
+        r = requests.post(
+            f"https://discord.com/api/v9/channels/{channelID}/messages", headers=header, data=payload, files=files)
+    else:
+        r = requests.post(
+            f"https://discord.com/api/v9/channels/{channelID}/messages", headers=header, data=payload)
 
 def createDiscordConfig():
     try:
@@ -96,3 +106,9 @@ def GuidedInstallDiscord():
              botconfig['BotName'])
     pg.alert("Remember : To Add the user to send msg through this bot open discord in browser and select the last Integer like string\n\nExample : https://discord.com/channels/@me/826522141704060949 is the user's link the copy 826522141704060949 and this is our ID for that user",
              botconfig['BotName'])
+
+
+image = askopenfilename(
+    filetypes=[("Select Images", ".png .jpg .jpeg")])
+sendMSG("Hello", "OTc0NTk2MTA4MDgyODc2NDI2.GSOHFa.NSjS437OxesuODYHD7F2J7AVtN7EPXJOimH_SU",
+        "974597594728767519", image)

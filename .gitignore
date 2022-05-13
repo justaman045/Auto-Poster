@@ -9,7 +9,6 @@ __pycache__/
 *.json
 *.txt
 Telegram.py
-Instagram.py
 *.dtc
 test.*
 *.db
