@@ -1,9 +1,9 @@
 import json
 import pyperclip as clip
 from Provider.Discord.Discord import sendDiscordMessage
-from Provider.Reddit.Reddit import Upload
+from Provider.Reddit.Reddit import GetRedditSub, GetRedditTags, Upload
 import pymsgbox as pg
-from Provider.Twitter.Twitter import AddHashtags, UploadToTwitter
+from Provider.Twitter.Twitter import AddHashtagsToPost, UploadToTwitter
 
 from components.GraphicalElements.PostBox import PlatformsToUpload, PlatformsToUploadImages, PostBox
 
@@ -57,9 +57,11 @@ def PostOnSocials(Message, LocationOfImage, PlatformsToUploadImagess, PlatformsT
                             toUpload.append(f'{i}DIU')
                 else:
                     toUpload.append(f'{i}NI')
+                GetRedditSub(GetRedditTags())
+                subReddits = str(clip.paste()).split("+")[:-1]
             if i == "Twitter":
                 if len(Message) < 270:
-                    TwitterPost = AddHashtags(Message)
+                    TwitterPost = AddHashtagsToPost(Message)
                 else:
                     TwitterPost = Message
                 toUpload.append(i)
@@ -76,4 +78,5 @@ def PostOnSocials(Message, LocationOfImage, PlatformsToUploadImagess, PlatformsT
             Upload(title=title, message="",
                    pathOfImage=LocationOfImage)
         if "RedditDIU" in toUpload or "RedditNI" in toUpload:
-            Upload(title=title, message=Message, pathOfImage="")
+            Upload(title=title, message=Message,
+                   pathOfImage="", subReddits=subReddits)

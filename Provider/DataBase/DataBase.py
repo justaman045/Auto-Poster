@@ -13,6 +13,7 @@ class DataBase:
         cursor = connection.cursor()
         cursor.execute('create table if not exists "Bot Config" ( "Bot Name" Text, Version VarChar2 )')
         cursor.execute('create table if not exists Apps ( Platform Text, isInstalled Text, "About Platform" text )')
+        connection.commit()
         Data = cursor.execute('select * from Apps').fetchall()
         if len(Data) == 0:
             SqlStatements = [
@@ -33,4 +34,10 @@ class DataBase:
             for i in SqlStatements:
                 cursor.execute(i)
             connection.commit()
+        connection.close()
+
+    def FetchData():
+        connection = sqlite3.connect('AutoPoster.db')
+        cursor = connection.cursor()
+        connection.close()
         

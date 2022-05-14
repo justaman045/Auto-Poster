@@ -12,6 +12,7 @@ cursor = connection.cursor()
 DataBase.CheckOrCreateDefault()
 
 config = cursor.execute('select * from "Bot Config"').fetchall()
+connection.close()
 
 def startTheBot():
     BotName = config[0][0]

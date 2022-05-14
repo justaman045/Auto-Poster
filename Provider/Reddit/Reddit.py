@@ -1,5 +1,3 @@
-import json
-import os
 import random
 import socket
 import sqlite3
@@ -12,30 +10,49 @@ from tkinter.scrolledtext import ScrolledText
 import pymsgbox as pg
 
 
+# Get all the Subreddits which A User is into 
 def GetRedditTags():
-    currentPath = os.getcwd()
-    path = os.path.join(currentPath, "Provider", "Reddit")
-    os.chdir(path)
-    with open("reddit.json", "r") as f:
-        creds = json.load(f)
-    os.chdir(currentPath)
-    reddit = praw.Reddit(client_id=creds['client_id'],client_secret=creds['client_secret'],user_agent=creds['user_agent'],redirect_uri=creds['redirect_uri'],refresh_token=creds['refresh_token'])
+
+    # Creating Connection to DataBase 
+    connection = sqlite3.connect('AutoPoster.db')
+    cursor = connection.cursor()
+
+    # Executing a Query to fetch the reddit API keys 
+    creds = cursor.execute('select * from Reddit').fetchall()[0]
+
+    # Logging into Reddit using API 
+    reddit = praw.Reddit(client_id=creds[0],
+                         client_secret=creds[1],
+                         user_agent=creds[2],
+                         redirect_uri=creds[3],
+                         refresh_token=creds[4])
+
+    # Getting all the Subreddits with it's display Name and sorting it alphabetical order
     my_subs = [subreddit.display_name for subreddit in reddit.user.subreddits(limit=None)]
     my_subs.sort()
+
+    # Closing the Database connection and returning the Output 
+    connection.close()
     return my_subs
 
 
+# GUI to select and get the Subreddits to post in 
 def GetRedditSub(options: list):
+
+    # Creating base root window with some of its properties 
     root = Tk()
     root.config(width=500, height=len(options)*10)
     root.title("Select the Subreddits")
     root.geometry(f"500x500")
+    root.resizable(width=False, height=False)
 
+    # Creating an array of Variables to store the value of the selected checkbox 
     optionCheckBox = {f"{options[0]}": IntVar()}
     for i in options:
         if i != options[0]:
             optionCheckBox[f"{i}"] = IntVar()
 
+    # onclick Button so that whenever the next button is clicked some operations can be performed 
     def show():
         overallText = ""
         for key, value in optionCheckBox.items():
@@ -44,6 +61,8 @@ def GetRedditSub(options: list):
                 overallText += f"{key}+"
         clip.copy(overallText)
         root.destroy()
+
+    # Developing some base window and Painting the UI so that elements can be interactable with the users 
     text = ScrolledText(root, width=58, height=25)
     text.place(x=10, y=20)
     for key, value in optionCheckBox.items():
@@ -51,86 +70,144 @@ def GetRedditSub(options: list):
     Button(root, text="Next", command=show).place(x=230, y=440)
     label = Label(root, text=" ")
     label.pack()
+
+    # Running the Root window in a loop so that the user can have time to select his subreddits to post 
     root.mainloop()
 
+
+# Function to Post on Reddit Recursivly 
 def PostOnReddit(title: str, subReddits: str, message: str, pathOfImage: str):
-    currentPath = os.getcwd()
-    pathDir = os.path.join("Provider", "Reddit")
-    os.chdir(pathDir)
-    with open("reddit.json", 'r') as f:
-        creds = json.load(f)
-    reddit = praw.Reddit(client_id=creds['client_id'],
-                         client_secret=creds['client_secret'],
-                         user_agent=creds['user_agent'],
-                         redirect_uri=creds['redirect_uri'],
-                         refresh_token=creds['refresh_token'])
-    try:
-        with open("bannedSubreddits.txt", 'r') as f:
-            pass
-    except FileNotFoundError:
-        with open("bannedSubreddits.txt", 'a') as f:
-            f.write("announcements")
-    finally:
-        with open("bannedSubreddits.txt", 'r') as f:
-            subreds = f.readlines()
+
+    # Creating connection from the DataBase 
+    connection = sqlite3.connect('AutoPoster.db')
+    cursor = connection.cursor()
+
+    # get the Reddit API Keys from Reddit 
+    creds = cursor.execute('select * from Reddit').fetchall()[0]
+
+    # Login into the Reddit using API Keys 
+    reddit = praw.Reddit(client_id=creds[0],
+                         client_secret=creds[1],
+                         user_agent=creds[2],
+                         redirect_uri=creds[3],
+                         refresh_token=creds[4])
+
+    # If there is no table named BannedSubred then create one to store the Names of Banned Subreddits 
+    cursor.execute(
+        'create table if not exists "BannedSubred" ( "Subreddits" Text )')
+
+    # If it is created then commit and save the DataBase 
+    connection.commit()
+
+    # Now fetch all the Data from the DataBase from the Table named BannedSubred 
+    subreds = cursor.execute('select * from "BannedSubred"').fetchall()
+
+    # Sort it like it is a list 
+    subreds = [x[0] for x in subreds]
+
+    # Select one subreddit at a time and then post on it 
     for i in subReddits:
+
+        # Authenticate the Subreddit 
         subreddit = reddit.subreddit(i)
+
+        # Make it Validated after submission 
         reddit.validate_on_submit = True
-        if f"{i}\n" not in subreds:
+
+        # check if the subreddit is not avavialable in the Banned Subreddits List then proceed else print that it is BlackListed
+        if i not in subreds:
+
+            # If there is no text to post then post image else post text only 
             try:
                 if len(message) > 0:
                     subreddit.submit(title, selftext=message)
+                    pass
                 else:
                     subreddit.submit_image(title, pathOfImage)
+                    pass
+
+                # After Posting print the message that it has been posted else it might have been black listed 
                 print(f"Successfully Posted in {i}")
+
             except:
-                with open("bannedSubreddits.txt", "a") as f:
-                    f.write(f"{i}\n")
+
+                # If there is any kind of error then it is treated as Banned from Subreddit and it's name is then saved as Banned from Subreddit 
+                cursor.execute(f'insert into "BannedSubred" values ( "{i}" )')
         else:
+
+            # If the Particular subreddit is found in the list of Blacklisted Subreddit then nothing is done with it else to just print that it's blacklisted 
             print(f"Skipped Sub Reddit {i} because it is BlackListed")
-    os.chdir(currentPath)
+
+    # Now Everything is done then just save and close the connection of the Database 
+    connection.commit()
+    connection.close()
 
 
-def Upload(title: str, message: str, pathOfImage: str):
-    GetRedditSub(GetRedditTags())
-    subReddits = str(clip.paste()).split("+")[:-1]
+# A Function which recives the particular Information from the Main Post Area and Posts eveything by calling the PostOnReddit function 
+def Upload(title: str, message: str, pathOfImage: str, subReddits: str):
+
+    # Call the PostOnReddit Function to Upload 
     PostOnReddit(title=title, subReddits=subReddits,
                  message=message, pathOfImage=pathOfImage)
 
+
+# A Basic Guide to Install the Reddit Module 
 def RedditGuideToInstall():
     pg.alert("Create a New App from Reddit Apps Dashboard for this particular BOT.\n\nThe Link for that is https://www.reddit.com/prefs/apps", "Creating Reddit App")
     pg.alert("Your App Configuration should match something like this.\n\nApp type : Script\nAbout URL : http://localhost:8080\nredirect URI : http://localhost:8080", "Creating Reddit App")
 
     
+# Reddit Config Creation with the Reddit API and the DataBase
 def CreateRedditConfig():
+
+    # Creating the Connection with the Database 
     connection = sqlite3.connect('AutoPoster.db')
     cursor = connection.cursor()
+
+    # Query to fetch data from the DataBase 
     config = cursor.execute('select * from "Bot Config"').fetchall()[0]
+
+    # Get the Input from the User for the Client ID if nothing entered then exit 
     clientID = pg.prompt("Enter the Client ID ( Which is just below the Bot Name on Reddit Dev Dashboard )", "Collecting Client ID")
     if clientID == None:
         exit()
+
+    # Get the ClientSecret from the User if nothing entered then exit 
     clientSecret = pg.prompt("Enter the Client Secret", "Collecting Client Secret")
     if clientSecret == None:
         exit()
+
+    # Get the Refresh Token from the Reddit Official Website 
     refreshToken = main(clientID, clientSecret)
+
+    # If Refresh Token is succesfully caught then create a Reddit Table in DataBase and save the changes 
     if refreshToken != 1:
+
+        # create the table named as Reddit 
         cursor.execute(f'create table if not exists Reddit ( ClientId VarChar2, ClientSecret VarChar2, UserAgent Text, redirectURI VarChar2, refreshToken VarChar2 )')
+
+        # Insert the Values in it 
         cursor.execute(
             f'insert into Reddit values ( "{clientID}", "{clientSecret}", "{config[0]}", "http://localhost:8080", "{refreshToken}" )')
+        
+        # Update the Apps Table also so that it indicates that Reddit Module has been Installed 
+        cursor.execute('UPDATE Apps SET isInstalled = "Yes" WHERE Platform = "Reddit"')
+
+        # Commit and close the DataBase connection 
         connection.commit()
+        connection.close()
+
+        # Return the Done str so that rest of the things can be done 
         return "Done"
     else:
+
+        # If there is any kind of error then tell the user that there is an error 
         pg.alert(
             "There was some Error in Authentication.\n\nPlease Try again", config["BotName"])
         return "Error"
 
-
+# Functions to get the refresh token from Reddit 
 def receive_connection():
-    """Wait for and then return a connected socket..
- 
-    Opens a TCP connection on port 8080, and waits for a single client.
- 
-    """
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     server.bind(("localhost", 8080))
@@ -141,32 +218,13 @@ def receive_connection():
 
 
 def send_message(client, message):
-    """Send message to client and close the connection."""
-    print(message)
     client.send(f"HTTP/1.1 200 OK\r\n\r\n{message}".encode("utf-8"))
     client.close()
 
 
 def main(clientID, ClientSecret):
-    """Provide the program's entry point when directly executed."""
-    print(
-        "Go here while logged into the account you want to create a token for: "
-        "https://www.reddit.com/prefs/apps/"
-    )
-    print(
-        "Click the create an app button. Put something in the name field and select the"
-        " script radio button."
-    )
-    print("Put http://localhost:8080 in the redirect uri field and click create app")
     client_id = clientID
     client_secret = ClientSecret
-    # client_id = pg.prompt(
-    #     "Enter the client ID, it's the line just under Personal use script at the top: ",
-    #     "Enter the client ID, it's the line just under Personal use script at the top: "
-    # )
-    # client_secret = pg.prompt(
-    #     "Enter the client secret, it's the line next to secret: ",
-    #     "Enter the client secret, it's the line next to secret: ")
     commaScopes = 'all'
 
     if commaScopes.lower() == "all":
@@ -206,13 +264,20 @@ def main(clientID, ClientSecret):
     send_message(client, f"Refresh token: {refresh_token}")
     return refresh_token
 
+
+# Delete the Config of Reddit from the DataBase 
 def DeleteRedditConfig():
-    currentPath = os.getcwd()
-    pathDir = os.path.join("Provider", "Reddit")
-    os.chdir(pathDir)
-    with open("reddit.json", 'w') as f:
-        f.write("")
-    os.chdir(currentPath)
+
+    # Create the Connection from the DataBase 
+    connection = sqlite3.connect('AutoPoster.db')
+    cursor = connection.cursor()
+
+    # Delete the Table from the Database Named Reddit 
+    cursor.execute('drop table Reddit')
+
+    # Close the connection and commit the changes 
+    connection.commit()
+    connection.close()
+
+    # Return Done which indicates that the deleting of the API Keys was successful 
     return "Done"
-
-

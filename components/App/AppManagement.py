@@ -6,74 +6,58 @@ import pymsgbox as pg
 from Provider.Discord.Discord import GuidedInstallDiscord, createDiscordConfig, deleteDiscordConfig
 
 from Provider.Reddit.Reddit import CreateRedditConfig, DeleteRedditConfig, RedditGuideToInstall
-from Provider.Twitter.Twitter import APISetup, InstallTwitter, UnInstallTwitter
+from Provider.Twitter.Twitter import APISetup, AddHashtag, InstallTwitter, UnInstallTwitter
 
 def getApps():
-
     connection = sqlite3.connect('AutoPoster.db')
     cursor = connection.cursor()
     Apps = cursor.execute('select * from Apps').fetchall()
+    connection.close()
     tempPlace = 1
     tempPlacee = 0
 
-    def GuidedInstall(AppName):
-        if AppName == 'Reddit':
-            # pass
-            RedditGuideToInstall()
-        if AppName == 'Twitter':
-            # pass
-            APISetup()
-        if AppName == 'Discord':
-            # pass
-            GuidedInstallDiscord()
-        CreateConfig(AppName)
-
-    def CreateAppConfig(App):
+    def CreateAppConfig(App, guided):
         if App == 'Reddit':
-            # pass
+            if guided == True:
+                RedditGuideToInstall()
             return CreateRedditConfig()
         if App == 'Twitter':
-            # pass
+            if guided == True:
+                APISetup()
             return InstallTwitter()
         if App == 'Discord':
+            if guided == True:
+                GuidedInstallDiscord()
             return createDiscordConfig()
 
     def DeleteAppConfig(App):
         if App == 'Reddit':
-            # pass
             return DeleteRedditConfig()
         if App == 'Twitter':
-            # pass
             return UnInstallTwitter()
         if App == 'Discord':
             return deleteDiscordConfig()
 
-    def CreateConfig(AppName):
-        # if Apps[AppName]["installed"] == "Yes":
-        #     choice = pg.confirm(f"This will Uninstall {AppName} and Clear all the Application Keys and API's\n\nAre you sure??", f"Uninstall {AppName}", buttons=["Uninstall", "Don't Uninstall"])
-        #     if choice == "Uninstall":
-        #         res = DeleteAppConfig(AppName)
-        #         if res == "Done":
-        #             Apps[AppName]["installed"] = "NO"
-        #             with open("installedApps.json", 'w') as f:
-        #                 json.dump(Apps, f, indent=4)
-        #         else:
-        #             exit()
-        #     else:
-        #         pg.alert(f"{AppName} hasn't been Uninstalled and you can still use it.", "UnInstall Aborted")
-        # elif Apps[AppName]["installed"] == "NO":
-        #     res = CreateAppConfig(AppName)
-        #     if res == "Done":
-        #         Apps[AppName]["installed"] = "Yes"
-        #         with open("installedApps.json", 'w') as f:
-        #             json.dump(Apps, f, indent=4)
-        #     else:
-        #         exit()
+    def CreateConfig(AppName, guided = False):
         for App in Apps:
             if App[0] == AppName:
                 if App[1] == 'No':
-                    CreateAppConfig(AppName)
-        # root.destroy()
+                    CreateAppConfig(AppName, guided)
+                elif App[1] == 'Yes':
+                    choice = pg.confirm(f"This will Uninstall {AppName} and Clear all the Application Keys and API's\n\nAre you sure??", f"Uninstall {AppName}", buttons=[
+                                        "Uninstall", "Don't Uninstall"])
+                    if choice == "Uninstall":
+                        res = DeleteAppConfig(AppName)
+                        print(res)
+                        if res == "Done":
+                            connection = sqlite3.connect('AutoPoster.db')
+                            cursor = connection.cursor()
+                            cursor.execute(f'update Apps set isInstalled = "No" where Platform = "{AppName}"')
+                            connection.commit()
+                            connection.close()
+                        else:
+                            exit()
+        root.destroy()
 
 
     root = Tk()
@@ -95,13 +79,17 @@ def getApps():
         Labelf = Message(frame, text=App[2], width=300)
         Labelf.grid(row=tempPlace, padx=5)
         if App[1] == 'No':
-            Button(frame, command=lambda m=App[0]: GuidedInstall(m),
+            Button(frame, command=lambda m=App[0]: CreateConfig(m, True),
                    text="Install with Guide").grid(row=tempPlacee, column=1, padx=(90, 0))
             Button(frame, command=lambda m=App[0]: CreateConfig(m),
                    text="Install").grid(row=tempPlacee, column=2)
         elif App[1] == "Yes":
             Button(frame, command=lambda m=App[0]: CreateConfig(m),
                    text="Uninstall").grid(row=tempPlacee, column=2)
+            if App[0] == "Twitter":
+                Button(frame, command=lambda m=App[0]: AddHashtag(),
+                    text="Add Hashtags").grid(row=tempPlacee, column=1, padx=(90, 0))
+
         tempPlace += 2
         tempPlacee += 2
 
@@ -116,4 +104,4 @@ def getApps():
 
     root.mainloop()
 
-getApps()
+# getApps()

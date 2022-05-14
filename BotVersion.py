@@ -1,1 +1,1 @@
-BotVersion = '1.1.5'
+BotVersion = '1.1.6'

@@ -108,7 +108,7 @@ def GuidedInstallDiscord():
              botconfig['BotName'])
 
 
-image = askopenfilename(
-    filetypes=[("Select Images", ".png .jpg .jpeg")])
-sendMSG("Hello", "OTc0NTk2MTA4MDgyODc2NDI2.GSOHFa.NSjS437OxesuODYHD7F2J7AVtN7EPXJOimH_SU",
-        "974597594728767519", image)
+# image = askopenfilename(
+#     filetypes=[("Select Images", ".png .jpg .jpeg")])
+# sendMSG("Hello", "OTc0NTk2MTA4MDgyODc2NDI2.GSOHFa.NSjS437OxesuODYHD7F2J7AVtN7EPXJOimH_SU",
+#         "974597594728767519", image)
