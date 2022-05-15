@@ -1,9 +1,7 @@
-import json
 import sqlite3
 from tkinter import *
-from numpy import pad
 import pymsgbox as pg
-from Provider.Discord.Discord import GuidedInstallDiscord, createDiscordConfig, deleteDiscordConfig
+from Provider.Discord.Discord import AddChannel, GuidedInstallDiscord, createDiscordConfig, deleteDiscordConfig
 
 from Provider.Reddit.Reddit import CreateRedditConfig, DeleteRedditConfig, RedditGuideToInstall
 from Provider.Twitter.Twitter import APISetup, AddHashtag, InstallTwitter, UnInstallTwitter
@@ -89,6 +87,9 @@ def getApps():
             if App[0] == "Twitter":
                 Button(frame, command=lambda m=App[0]: AddHashtag(),
                     text="Add Hashtags").grid(row=tempPlacee, column=1, padx=(90, 0))
+            if App[0] == "Discord":
+                Button(frame, command=lambda m=App[0]: AddChannel(),
+                    text="Add Channels").grid(row=tempPlacee, column=1, padx=(90, 0))
 
         tempPlace += 2
         tempPlacee += 2

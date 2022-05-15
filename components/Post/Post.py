@@ -1,14 +1,17 @@
 import json
+import sqlite3
 import pyperclip as clip
 from Provider.Discord.Discord import sendDiscordMessage
 from Provider.Reddit.Reddit import GetRedditSub, GetRedditTags, Upload
 import pymsgbox as pg
 from Provider.Twitter.Twitter import AddHashtagsToPost, UploadToTwitter
 
-from components.GraphicalElements.PostBox import PlatformsToUpload, PlatformsToUploadImages, PostBox
+from components.GraphicalElements.PostBox import MultiPurposeOptionBox, PlatformsToUpload, PlatformsToUploadImages, PostBox
 
-with open("config.json", 'r') as f:
-    config = json.load(f)
+connection = sqlite3.connect('AutoPoster.db')
+cursor = connection.cursor()
+config = cursor.execute('select * from "Bot Config"').fetchall()[0]
+connection.close()
 
 def GetPostandImage():
     PostBox("Enter Your Post")
@@ -41,6 +44,7 @@ def Post():
     
 
 def PostOnSocials(Message, LocationOfImage, PlatformsToUploadImagess, PlatformsToUploads):
+    channels = []
     toUpload = []
     try:
         for i in PlatformsToUploads:
@@ -67,13 +71,28 @@ def PostOnSocials(Message, LocationOfImage, PlatformsToUploadImagess, PlatformsT
                 toUpload.append(i)
             if i == 'Discord':
                 toUpload.append(i)
+                connection = sqlite3.connect('AutoPoster.db')
+                cursor = connection.cursor()
+                discord = cursor.execute('select * from Discord').fetchall()
+                discordConfig = []
+                for i in discord:
+                    discordConfig.append(i[3])
+                MultiPurposeOptionBox("Select on which Channels you want to send Message", discordConfig,
+                                      "Discord App has been currupted in you local machine ( Please Re-install the app again from App Management )")
+                channels = str(clip.paste()).split("+")
+                channels = channels[:-1]
+                connection.close()
     finally:
-        pg.alert(
-            "Sucessfully Uploaded the Tweet/Status to every Playform", config["BotName"])
+        if len(toUpload) == 0:
+            pg.alert(
+                "Status/Post/Tweet wasn't sent as Platform wasn't specified", config[0])
+        else:
+            pg.alert(
+                "Sucessfully Uploaded the Tweet/Status to every Playform", config[0])
         if "Twitter" in toUpload:
             UploadToTwitter(TwitterPost, LocationOfImage)
         if "Discord" in toUpload:
-            sendDiscordMessage(Message)
+            sendDiscordMessage(Message, LocationOfImage, discordConfig, channels)
         if "RedditDPT" in toUpload:
             Upload(title=title, message="",
                    pathOfImage=LocationOfImage)
