@@ -1,5 +1,6 @@
 import json
 import os
+import sqlite3
 from tkinter import *
 from tkinter.filedialog import askopenfilename
 from tkinter.scrolledtext import ScrolledText
@@ -39,20 +40,21 @@ def PostBox(title):
             stringData = f"You've exceeded {len(Post) - 280} Charecters. Please Remove {len(Post) - 280} Charecters"
             labl3.config(text=stringData)
 
+    connection = sqlite3.connect('AutoPoster.db')
+    cursor = connection.cursor()
+    config = cursor.execute('select * from "Bot Config"').fetchall()[0]
+    Apps = cursor.execute('select * from Apps').fetchall()
+    connection.close()
     InstalledApps = []
-    with open("installedApps.json", 'r') as f:
-        Apps = json.load(f)
-    with open("config.json", 'r') as f:
-        config = json.load(f)
 
     for i in Apps:
-        if str(Apps[i]["installed"]) == "Yes":
-            InstalledApps.append(i)
+        if str(i[1]) == "Yes":
+            InstalledApps.append(i[0])
     optionCheckBox = {}
 
     if len(InstalledApps) == 0:
         pg.alert(
-            "None of the Apps are Installed.\n\nInstall Some Apps via App Management", config["BotName"])
+            "None of the Apps are Installed.\n\nInstall Some Apps via App Management", config[0])
         exit()
     else:
         for i in InstalledApps:
@@ -98,19 +100,20 @@ def PlatformsToUpload():
         root.destroy()
 
     InstalledApps = []
-    with open("installedApps.json", 'r') as f:
-        Apps = json.load(f)
-    with open("config.json", 'r') as f:
-        config = json.load(f)
+    connection = sqlite3.connect('AutoPoster.db')
+    cursor = connection.cursor()
+    config = cursor.execute('select * from "Bot Config"').fetchall()[0]
+    Apps = cursor.execute('select * from Apps').fetchall()
+    connection.close()
 
     for i in Apps:
-        if str(Apps[i]["installed"]) == "Yes":
-            InstalledApps.append(i)
+        if str(i[1]) == "Yes":
+            InstalledApps.append(i[0])
     optionCheckBox = {}
 
     if len(InstalledApps) == 0:
         pg.alert(
-            "None of the Apps are Installed.\n\nInstall Some Apps via App Management", config["BotName"])
+            "None of the Apps are Installed.\n\nInstall Some Apps via App Management", config[0])
         exit()
     else:
         for i in InstalledApps:
@@ -148,19 +151,20 @@ def PlatformsToUploadImages():
         root.destroy()
 
     InstalledApps = []
-    with open("installedApps.json", 'r') as f:
-        Apps = json.load(f)
-    with open("config.json", 'r') as f:
-        config = json.load(f)
+    connection = sqlite3.connect('AutoPoster.db')
+    cursor = connection.cursor()
+    config = cursor.execute('select * from "Bot Config"').fetchall()[0]
+    Apps = cursor.execute('select * from Apps').fetchall()
+    connection.close()
 
     for i in Apps:
-        if str(Apps[i]["installed"]) == "Yes":
-            InstalledApps.append(i)
+        if str(i[1]) == "Yes":
+            InstalledApps.append(i[0])
     optionCheckBox = {}
 
     if len(InstalledApps) == 0:
         pg.alert(
-            "None of the Apps are Installed.\n\nInstall Some Apps via App Management", config["BotName"])
+            "None of the Apps are Installed.\n\nInstall Some Apps via App Management", config[0])
         exit()
     else:
         for i in InstalledApps:
@@ -197,8 +201,10 @@ def MultiPurposeOptionBox(title, options, ErrorMsg):
         root.destroy()
 
     InstalledApps = []
-    with open("config.json", 'r') as f:
-        config = json.load(f)
+    connection = sqlite3.connect('AutoPoster.db')
+    cursor = connection.cursor()
+    config = cursor.execute('select * from "Bot Config"').fetchall()[0]
+    connection.close()
 
     for i in options:
         InstalledApps.append(i)
