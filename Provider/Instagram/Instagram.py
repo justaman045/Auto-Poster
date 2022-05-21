@@ -26,7 +26,7 @@ browser.find_element(
     By.XPATH, "/html/body/div[1]/section/main/article/div[2]/div[1]/div[2]/form/div/div[2]/div/label/input").send_keys(passwd)
 browser.find_element(
     By.XPATH, "/html/body/div[1]/section/main/article/div[2]/div[1]/div[2]/form/div/div[3]").click()
-time.sleep(2)
+time.sleep(20)
 browser.find_element(
     By.XPATH, "/html/body/div[1]/section/main/div/div/div/div/button")
 browser.get(f'https://instagram.com/{username}')
@@ -34,7 +34,16 @@ time.sleep(5)
 browser.find_element_by_xpath(
     '/html/body/div[1]/section/nav/div[2]/div/div/div[3]/div/div[3]/div').click()
 
-time.sleep(5)
-# browser.find_element(
-#     By.XPATH, "/html/body/div[8]/div[2]/div/div/div/div[2]/div[1]/form/input").send_keys(photopath)
+
+parent_h = browser.current_window_handle
+# click on the link that opens a new window
+handles = browser.window_handles  # before the pop-up window closes
+handles.remove(parent_h)
+browser.switch_to_window(handles.pop())
+# do stuff in the popup
+# popup window closes
+browser.switch_to_window(parent_h)
+# and you're back
+
+
 time.sleep(220)
