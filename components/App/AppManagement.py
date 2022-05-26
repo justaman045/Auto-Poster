@@ -2,6 +2,7 @@ import sqlite3
 from tkinter import *
 import pymsgbox as pg
 from Provider.Discord.Discord import AddChannel, GuidedInstallDiscord, createDiscordConfig, deleteDiscordConfig
+from Provider.Instagram.Instagram import GuideInstagram, InstallInstagram
 
 from Provider.Reddit.Reddit import CreateRedditConfig, DeleteRedditConfig, RedditGuideToInstall
 from Provider.Twitter.Twitter import APISetup, AddHashtag, InstallTwitter, UnInstallTwitter
@@ -27,6 +28,10 @@ def getApps():
             if guided == True:
                 GuidedInstallDiscord()
             return createDiscordConfig()
+        if App == 'Instagram':
+            if guided == True:
+                GuideInstagram()
+            return InstallInstagram()
 
     def DeleteAppConfig(App):
         if App == 'Reddit':
@@ -34,6 +39,8 @@ def getApps():
         if App == 'Twitter':
             return UnInstallTwitter()
         if App == 'Discord':
+            return deleteDiscordConfig()
+        if App == 'Instagram':
             return deleteDiscordConfig()
 
     def CreateConfig(AppName, guided = False):
@@ -90,6 +97,9 @@ def getApps():
             if App[0] == "Discord":
                 Button(frame, command=lambda m=App[0]: AddChannel(),
                     text="Add Channels").grid(row=tempPlacee, column=1, padx=(90, 0))
+            if App[0] == "Instagram":
+                Button(frame, command=lambda m=App[0]: AddChannel(),
+                    text="Add Accounts").grid(row=tempPlacee, column=1, padx=(90, 0))
 
         tempPlace += 2
         tempPlacee += 2
