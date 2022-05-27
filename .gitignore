@@ -7,7 +7,6 @@ test2.py
 bannedSubreddits.txt
 __pycache__/
 *.json
-*.txt
 Telegram.py
 *.dtc
 test.*
