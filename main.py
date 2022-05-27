@@ -1,7 +1,5 @@
 import pymsgbox as pg
 from Provider.DataBase.DataBase import DataBase
-from components.App.AppManagement import getApps
-import components.Post.Post
 import sqlite3
 from BotVersion import BotVersion as version
 
@@ -10,6 +8,8 @@ BotVersion = version
 connection = sqlite3.connect('AutoPoster.db')
 cursor = connection.cursor()
 DataBase.CheckOrCreateDefault()
+import components.Post.Post
+from components.App.AppManagement import getApps
 
 config = cursor.execute('select * from "Bot Config"').fetchall()
 connection.close()

@@ -20,6 +20,7 @@ class DataBase:
                 "insert into Apps values ( 'Reddit', 'No', 'Post on Reddit a Social Media Platform based on sub-reddits ( Communities ) without even opening Reddit' )",
                 "insert into Apps values ( 'Twitter', 'No', 'Post on Twitter a Social Media Platform will just tweet.' )",
                 "insert into Apps values ( 'Discord', 'No', 'Send Messages to Discord using this Bot with ease' )",
+                "insert into Apps values ( 'Instagram', 'No', 'Upload Images on Instagram without even opening your Browser' )",
             ]
             for i in SqlStatements:
                 cursor.execute(i)
