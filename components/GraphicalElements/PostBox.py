@@ -84,7 +84,7 @@ def PostBox(title):
 
     root.mainloop()
 
-def PlatformsToUpload():
+def PlatformsToUpload(Image):
     root = Tk()
     root.geometry("500x500")
     root.title("Select the Platforms to Upload")
@@ -108,7 +108,10 @@ def PlatformsToUpload():
 
     for i in Apps:
         if str(i[1]) == "Yes":
-            InstalledApps.append(i[0])
+            if len(Image) == 0 and i[0] not in ['Instagram']:
+                InstalledApps.append(i[0])
+            elif len(Image) != 0:
+                InstalledApps.append(i[0])
     optionCheckBox = {}
 
     if len(InstalledApps) == 0:

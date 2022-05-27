@@ -1,3 +1,4 @@
+import pymsgbox as pg
 import json
 import os
 import sqlite3
@@ -171,4 +172,80 @@ def AddChannel():
     connection.commit()    
     connection.close()
 
-# AddChannel()
+
+def UpdateAndDeleteDiscord():
+    TableName = "Discord"
+    connection = sqlite3.connect('AutoPoster.db')
+    cursor = connection.cursor()
+    Apps = cursor.execute(f'select * from {TableName}').fetchall()
+    config = cursor.execute('select * from "Bot Config"').fetchall()[0]
+    tempPlace = 1
+    tempPlacee = 0
+
+
+    def DiscordUpdate(username):
+        user = cursor.execute(
+            f'select * from "{TableName}" where ChannelName="{username}"').fetchall()[0]
+        newUsername = pg.prompt(
+            f"Enter the New Username ( If Changed )\n\nCurrent Username is {user[0]}", config[0], default=user[0])
+        if newUsername == None:
+            exit()
+        newAuthorization = pg.prompt(
+            f"Enter the New Authorization Key ( If Changed )\n\nCurrent Authorization Key is {user[1]}", config[0], default=user[1])
+        if newAuthorization == None:
+            exit()
+        newChannelID = pg.prompt(
+            f"Enter the New Channel ID ( If Changed )\n\nCurrent Channel ID is {user[2]}", config[0], default=user[2])
+        if newChannelID == None:
+            exit()
+        newChannelName = pg.prompt(
+            f"Enter the New Channel Name ( If Changed )\n\nCurrent Channel Name is {user[3]}", config[0], default=user[3])
+        if newChannelName == None:
+            exit()
+        if newUsername == user[0] and newAuthorization == user[1] and newChannelID == user[2] and newChannelName == user[3]:
+            pg.alert("Nothing has been changed so nothing is changed in DataBase")
+        else:
+            cursor.execute(
+                f'update "{TableName}" set "username"="{newUsername}", "authorizationKey"="{newAuthorization}", "ChannelID"="{newChannelID}", "ChannelName"="{newChannelName}" where "ChannelName"="{user[3]}"')
+            connection.commit()
+
+
+    def DiscordDelete(username):
+        cursor.execute(
+            f'delete from "{TableName}" where ChannelName="{username}"')
+        connection.commit()
+
+
+    root = Tk()
+    root.geometry("700x500")
+    root.title("App Configuration")
+    root.resizable(height=False, width=False)
+
+    textLabel = Label(root, text=f"{TableName} Configuration")
+    textLabel.config(font=(20))
+    textLabel.place(x=250, y=20)
+
+    canvas = Canvas(root, width=600, height=400)
+    frame = Frame(canvas)
+    scroll_y = Scrollbar(root, orient="vertical", command=canvas.yview)
+
+    for AppData in Apps:
+        AppLabel = Label(frame, text=AppData[3], height=5)
+        AppLabel.grid(padx=(30, 0))
+        Button(frame, width=10, command=lambda m=AppData[3]: DiscordUpdate(m),
+            text="Update").grid(row=tempPlacee, column=1, padx=(90, 0))
+        Button(frame, width=10, command=lambda m=AppData[3]: DiscordDelete(m),
+            text="Delete").grid(row=tempPlacee, column=1, padx=(250, 0))
+
+        tempPlacee += 1
+
+    canvas.create_window(0, 0, anchor='nw', window=frame, width=600)
+    canvas.update_idletasks()
+    canvas.configure(scrollregion=canvas.bbox('all'),
+                    yscrollcommand=scroll_y.set)
+    canvas.pack(fill='both', expand=True, side='left')
+    scroll_y.pack(fill='y', side='right')
+    canvas.focus_set()
+    canvas.place(x=50, y=50)
+
+    root.mainloop()

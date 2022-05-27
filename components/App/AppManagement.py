@@ -1,8 +1,8 @@
 import sqlite3
 from tkinter import *
 import pymsgbox as pg
-from Provider.Discord.Discord import AddChannel, GuidedInstallDiscord, createDiscordConfig, deleteDiscordConfig
-from Provider.Instagram.Instagram import GuideInstagram, InstallInstagram
+from Provider.Discord.Discord import AddChannel, GuidedInstallDiscord, UpdateAndDeleteDiscord, createDiscordConfig, deleteDiscordConfig
+from Provider.Instagram.Instagram import GuideInstagram, InstallInstagram, UpdateAndDeleteInstagram
 
 from Provider.Reddit.Reddit import CreateRedditConfig, DeleteRedditConfig, RedditGuideToInstall
 from Provider.Twitter.Twitter import APISetup, AddHashtag, InstallTwitter, UnInstallTwitter
@@ -53,7 +53,6 @@ def getApps():
                                         "Uninstall", "Don't Uninstall"])
                     if choice == "Uninstall":
                         res = DeleteAppConfig(AppName)
-                        print(res)
                         if res == "Done":
                             connection = sqlite3.connect('AutoPoster.db')
                             cursor = connection.cursor()
@@ -96,10 +95,14 @@ def getApps():
                     text="Add Hashtags").grid(row=tempPlacee, column=1, padx=(90, 0))
             if App[0] == "Discord":
                 Button(frame, command=lambda m=App[0]: AddChannel(),
-                    text="Add Channels").grid(row=tempPlacee, column=1, padx=(90, 0))
+                    text="Add Channels").grid(row=tempPlacee, column=1, padx=(0, 105))
+                Button(frame, command=lambda m=App[0]: UpdateAndDeleteDiscord(),
+                    text="Edit Configuration").grid(row=tempPlacee, column=1, padx=(90, 0))
             if App[0] == "Instagram":
-                Button(frame, command=lambda m=App[0]: AddChannel(),
-                    text="Add Accounts").grid(row=tempPlacee, column=1, padx=(90, 0))
+                Button(frame, command=lambda m=App[0]: InstallInstagram(),
+                    text="Add Accounts").grid(row=tempPlacee, column=1, padx=(0, 105))
+                Button(frame, command=lambda m=App[0]: UpdateAndDeleteInstagram(),
+                       text="Edit Configuration").grid(row=tempPlacee, column=1, padx=(90, 0))
 
         tempPlace += 2
         tempPlacee += 2

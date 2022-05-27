@@ -17,7 +17,7 @@ connection.close()
 def startTheBot():
     BotName = config[0][0]
     choice = pg.confirm(BotName, BotName,
-               buttons=["Post", "App Management", "Promote"])
+               buttons=["Post", "App Management"])
     if choice == "Post":
         components.Post.Post.Post()
     elif choice == "App Management":
@@ -25,8 +25,6 @@ def startTheBot():
             getApps()
         finally:
             startTheBot()
-    elif choice == 'Promote':
-        pass
     else:
         exit()
 
