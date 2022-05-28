@@ -1,7 +1,16 @@
-import pymsgbox as pg
-from Provider.DataBase.DataBase import DataBase
-import sqlite3
-from BotVersion import BotVersion as version
+import os
+
+
+try:
+    import pymsgbox as pg
+    from Provider.DataBase.DataBase import DataBase
+    import sqlite3
+    from BotVersion import BotVersion as version
+except ModuleNotFoundError:
+    os.system(f'pip install -r requirements.txt')
+    os.system(f'python -m pip install --upgrade pip')
+    print("\n\n\n\nPlease Restart this Software\n\n\n\nThanks for your Co-operation")
+    exit()
 
 BotVersion = version
 
