@@ -1,6 +1,7 @@
 import json
 import os
 import sqlite3
+import sys
 from tkinter import *
 from tkinter.filedialog import askopenfilename
 from tkinter.scrolledtext import ScrolledText
@@ -55,7 +56,7 @@ def PostBox(title):
     if len(InstalledApps) == 0:
         pg.alert(
             "None of the Apps are Installed.\n\nInstall Some Apps via App Management", config[0])
-        exit()
+        sys.exit()
     else:
         for i in InstalledApps:
             optionCheckBox[f"{i}"] = IntVar()

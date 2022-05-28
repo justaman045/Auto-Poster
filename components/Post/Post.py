@@ -31,6 +31,10 @@ def GetPlatformsImages():
     return PlatformsUpload
 
 def Post():
+    Post = None
+    Image = None
+    PlatformsToUploadImagess = None
+    PlatformsToUploads = None
     try:
         Post, Image = GetPostandImage()
         PlatformsToUploads = GetPlatforms(Image)
@@ -41,7 +45,8 @@ def Post():
     except:
         exit()
     finally:
-        PostOnSocials(Post, Image, PlatformsToUploadImagess, PlatformsToUploads)
+        if Post != None or Image != None:
+            PostOnSocials(Post, Image, PlatformsToUploadImagess, PlatformsToUploads)
     
 
 def PostOnSocials(Message, LocationOfImage, PlatformsToUploadImagess, PlatformsToUploads):
