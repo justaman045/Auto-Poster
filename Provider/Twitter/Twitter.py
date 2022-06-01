@@ -36,12 +36,13 @@ def InstallTwitter():
     Consumer_Secret = pg.prompt("Enter the API Key Secret Here : ", config[0])
     Access_Token = pg.prompt("Enter the Access Token Here : ", config[0])
     Access_Token_Secret = pg.prompt("Enter the Access Token Secret Here : ", config[0])
+    Bearer_Token_Secret = pg.prompt("Enter the Bearer Token Secret Here : ", config[0])
     hashtags = pg.prompt("Enter the Hashtags with the format #{hashtag} #{Hashtag}", config[0])
     cursor.execute(
-        f'create table if not exists Twitter ( Consumer_Key VarChar2, Consumer_Secret VarChar2, Access_Token VarChar2, Access_Token_Secret VarChar2, Hashtag Text )')
+        f'create table if not exists Twitter ( Consumer_Key VarChar2, Consumer_Secret VarChar2, Access_Token VarChar2, Access_Token_Secret VarChar2, Bearer_Token_Secret VarChar2, Hashtag Text )')
     connection.commit()
     cursor.execute(
-        f'insert into Twitter values ( "{Consumer_Key}", "{Consumer_Secret}", "{Access_Token}", "{Access_Token_Secret}", "{hashtags}" )')
+        f'insert into Twitter values ( "{Consumer_Key}", "{Consumer_Secret}", "{Access_Token}", "{Access_Token_Secret}", "{Bearer_Token_Secret}", "{hashtags}" )')
     cursor.execute(f'update Apps set isInstalled = "Yes" where Platform = "Twitter"')
     connection.commit()
     connection.close()
@@ -61,10 +62,7 @@ def UploadToTwitter(Post, Image):
     cursor = connection.cursor()
     data = cursor.execute('select * from Twitter').fetchall()[0]
 
-    auth = tweepy.OAuthHandler(
-        data[0], data[1])
-    auth.set_access_token(
-        data[2], data[3])
+    auth = tweepy.Client(bearer_token=data[4], consumer_key=data[1], consumer_secret=data[2], access_token=data[3], access_token_secret=data[4])
 
     api = tweepy.API(auth)
     if Image != "" and len(Post) != 0:
