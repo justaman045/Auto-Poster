@@ -26,6 +26,8 @@ def APISetup():
         "Now Click on the App Dashboard and go to the Keys and Token's Section and then create Access Token and Secret for your account", config[0])
     pg.alert("Now go on the Setting Tab of the App and Setup the User Authentication Settings and select OAuth 1.0a and give the App Permissions which ever you want from \nRead and Write \nRead and Write and Direct Message ( Recommended )\n and provide callback URI as http://localhost:8080/ and Website as https://twitter.com", config[0])
     pg.alert("Now go on the Keys and Tokens Tab and regenerate API Key and Secret and Access Token and Secret and Enter those now in this Software", config[0])
+    pg.alert("Do Make Sure that you have applied for Elevated Access in Twitter as if not you won't be able to Upload Images", config[0])
+    pg.alert("It seems thay you might not have applied for the Elevated Access for Twitter Or Maybe not yet Updated in the Backend. Please Check after 5 minutes to Post", config[0])
     connection.close()
 
 def InstallTwitter():
@@ -36,13 +38,12 @@ def InstallTwitter():
     Consumer_Secret = pg.prompt("Enter the API Key Secret Here : ", config[0])
     Access_Token = pg.prompt("Enter the Access Token Here : ", config[0])
     Access_Token_Secret = pg.prompt("Enter the Access Token Secret Here : ", config[0])
-    Bearer_Token_Secret = pg.prompt("Enter the Bearer Token Secret Here : ", config[0])
     hashtags = pg.prompt("Enter the Hashtags with the format #{hashtag} #{Hashtag}", config[0])
     cursor.execute(
-        f'create table if not exists Twitter ( Consumer_Key VarChar2, Consumer_Secret VarChar2, Access_Token VarChar2, Access_Token_Secret VarChar2, Bearer_Token_Secret VarChar2, Hashtag Text )')
+        f'create table if not exists Twitter ( Consumer_Key VarChar2, Consumer_Secret VarChar2, Access_Token VarChar2, Access_Token_Secret VarChar2, Hashtag Text )')
     connection.commit()
     cursor.execute(
-        f'insert into Twitter values ( "{Consumer_Key}", "{Consumer_Secret}", "{Access_Token}", "{Access_Token_Secret}", "{Bearer_Token_Secret}", "{hashtags}" )')
+        f'insert into Twitter values ( "{Consumer_Key}", "{Consumer_Secret}", "{Access_Token}", "{Access_Token_Secret}", "{hashtags}" )')
     cursor.execute(f'update Apps set isInstalled = "Yes" where Platform = "Twitter"')
     connection.commit()
     connection.close()
@@ -62,7 +63,10 @@ def UploadToTwitter(Post, Image):
     cursor = connection.cursor()
     data = cursor.execute('select * from Twitter').fetchall()[0]
 
-    auth = tweepy.Client(bearer_token=data[4], consumer_key=data[1], consumer_secret=data[2], access_token=data[3], access_token_secret=data[4])
+    auth = tweepy.OAuthHandler(
+        data[0], data[1])
+    auth.set_access_token(
+        data[2], data[3])
 
     api = tweepy.API(auth)
     if Image != "" and len(Post) != 0:
