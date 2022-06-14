@@ -69,12 +69,15 @@ def UploadToTwitter(Post, Image):
         data[2], data[3])
 
     api = tweepy.API(auth)
+    client = tweepy.Client(consumer_key=data[0], consumer_secret=data[1], access_token=data[2], access_token_secret=data[3])
     if Image != "" and len(Post) != 0:
-        api.update_status_with_media(Post, Image)
+        mediaID = api.media_upload(Image)
+        client.create_tweet(text=Post, media_ids=[mediaID.media_id_string])
     elif len(Post) == 0 and Image != "":
-        api.media_upload(file=Image)
+        mediaID = api.media_upload(Image)
+        client.create_tweet(media_ids=[mediaID.media_id_string])
     elif Image == "" and len(Post) != 0:
-        api.update_status(Post)
+        client.create_tweet(text=Post)
 
     connection.close()
     
@@ -94,16 +97,15 @@ def AddHashtag():
     data = cursor.execute('select * from Twitter').fetchall()[0]
     config = cursor.execute('select * from "Bot Config"').fetchall()[0]
     new_Hashtags = pg.prompt("Edit/Add New Hashtags for Twitter", config[0], data[4])
-    overallHashtag = ""
-    for i in str(new_Hashtags).split(" "):
-        if len(i) != 0:
-            if len(str(i[1:]).split("#")) == 2:
-                listStr = str(i[1:]).split("#")
-                overallHashtag += f'#{listStr[0]} #{listStr[1]}'
-            else:
-                overallHashtag += f'{i} '
-    cursor.execute(f'update Twitter set "Hashtag" = "{overallHashtag}" where "Hashtag" = "{data[4]}"')
-    connection.commit()
-    connection.close()
-        
+    if new_Hashtags != None:
+        overallHashtag = ""
+        for i in str(new_Hashtags).split(" "):
+            if len(i) != 0:
+                if len(str(i[1:]).split("#")) == 2:
+                    listStr = str(i[1:]).split("#")
+                    overallHashtag += f'#{listStr[0]} #{listStr[1]}'
+                else:
+                    overallHashtag += f'{i} '
+        cursor.execute(f'update Twitter set "Hashtag" = "{overallHashtag}" where "Hashtag" = "{data[4]}"')
+        connection.commit()
     connection.close()

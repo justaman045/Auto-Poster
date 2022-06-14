@@ -1,6 +1,5 @@
 import os
 
-
 try:
     import pymsgbox as pg
     from Provider.DataBase.DataBase import DataBase
