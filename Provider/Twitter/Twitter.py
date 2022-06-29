@@ -1,5 +1,3 @@
-import json
-import os
 import sqlite3
 import pymsgbox as pg
 import pyperclip as clip

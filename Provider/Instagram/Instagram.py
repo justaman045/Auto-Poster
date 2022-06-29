@@ -14,8 +14,6 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 
-# username = "tirega3310"
-# # passwd = "6fM3eyEGXYm9hmS"
 # # driverpth = "C:/Program Files/BraveSoftware/Brave-Browser/Application/brave.exe"
 # photopath = askopenfilename(filetypes=[("Select Images", ".png .jpg .jpeg")])
 # phototext = "Testing the Image"
