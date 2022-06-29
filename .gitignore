@@ -1,13 +1,10 @@
 Version 2/
-Provider/Reddit/__pycache__/
-components/GraphicalElements/__pycache__/
-components/Post/__pycache__/
 test.py
-test2.py
-bannedSubreddits.txt
+*.txt
 __pycache__/
 *.json
 Telegram.py
 *.dtc
 test.*
 *.db
+To Do.md
