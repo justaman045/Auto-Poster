@@ -48,25 +48,25 @@ def UploadToInstagram(Image, description, username):
     browser.find_element(
         By.NAME, "username").send_keys(username)
     browser.find_element(
-        By.XPATH, "/html/body/div[1]/section/main/article/div[2]/div[1]/div[2]/form/div/div[2]/div/label/input").send_keys(passwd)
+        By.NAME, 'password').send_keys(passwd)
     browser.find_element(
-        By.XPATH, "/html/body/div[1]/section/main/article/div[2]/div[1]/div[2]/form/div/div[3]").click()
+        By.XPATH, "/html/body/div[1]/section/main/article/div[2]/div[1]/div[2]/form/div/div[3]/button/div").click()
     time.sleep(5)
     browser.get(f'https://instagram.com/{username}')
-    time.sleep(10)
+    time.sleep(5)
     browser.find_element(
-        By.CSS_SELECTOR, '[aria-label="New Post"]').click()
+        By.CSS_SELECTOR, '[aria-label="New post"]').click()
 
 
 # To Stop until Loaded 
 
 # username = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, “input[name=’username’]”)))
 # password = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[name='password']")))
-
+# document.getElementsByTagName("input")[3].value
     browser.find_element(
-        By.XPATH, "/html/body/div[8]/div[2]/div/div/div/div[2]/div[1]/form/input").send_keys(Image)
+        By.XPATH, '//*[@id="mount_0_0_AM"]/div/div[1]/div/div[2]/div/div/div[1]/div/div[3]/div/div/div/div/div/div/div/div/div[2]/div[1]/form/input').send_keys(Image)
 
-    time.sleep(2)
+    time.sleep(200)
 
     browser.find_element(
         By.XPATH, "/html/body/div[6]/div[2]/div/div/div/div[1]/div/div/div[3]/div/button").click()
@@ -202,3 +202,6 @@ def UpdateAndDeleteInstagram():
     canvas.place(x=50, y=50)
 
     root.mainloop()
+
+
+UploadToInstagram(askopenfilename(filetypes=[("Select Images", ".png .jpg .jpeg")]), "Test Desc", "bugs_overflow")

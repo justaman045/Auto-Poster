@@ -46,7 +46,7 @@ elif MinorUpdate == True:
     if BugFixorPatches == True:
         BugFixorPatches = False
     printMSG("It's a Minor Update. Update it as you will get new features")
-else:
+elif BugFixorPatches == True:
     printMSG("It's a Bug Fix. Try Updating it as It may be related with your Privacy")
 
 BotVersion = version
