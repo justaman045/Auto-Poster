@@ -204,4 +204,4 @@ def UpdateAndDeleteInstagram():
     root.mainloop()
 
 
-UploadToInstagram(askopenfilename(filetypes=[("Select Images", ".png .jpg .jpeg")]), "Test Desc", "bugs_overflow")
+# UploadToInstagram(askopenfilename(filetypes=[("Select Images", ".png .jpg .jpeg")]), "Test Desc", "bugs_overflow")
