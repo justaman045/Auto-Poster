@@ -1,11 +1,11 @@
 import os
+from Provider.DataBase.DataBase import DataBase
+from BotVersion import BotVersion as version
+import sqlite3
 
 try:
     import pymsgbox as pg
     import requests
-    from Provider.DataBase.DataBase import DataBase
-    import sqlite3
-    from BotVersion import BotVersion as version
 except ModuleNotFoundError:
     os.system(f'pip install -r requirements.txt')
     os.system(f'python -m pip install --upgrade pip')
