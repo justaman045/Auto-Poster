@@ -36,12 +36,13 @@ def InstallTwitter():
     Consumer_Secret = pg.prompt("Enter the API Key Secret Here : ", config[0])
     Access_Token = pg.prompt("Enter the Access Token Here : ", config[0])
     Access_Token_Secret = pg.prompt("Enter the Access Token Secret Here : ", config[0])
+    Bearer_Token = pg.prompt("Enter the Bearer Token Here : ", config[0])
     hashtags = pg.prompt("Enter the Hashtags with the format #{hashtag} #{Hashtag}", config[0])
     cursor.execute(
-        f'create table if not exists Twitter ( Consumer_Key VarChar2, Consumer_Secret VarChar2, Access_Token VarChar2, Access_Token_Secret VarChar2, Hashtag Text )')
+        f'create table if not exists Twitter ( Consumer_Key VarChar2, Consumer_Secret VarChar2, Access_Token VarChar2, Access_Token_Secret VarChar2, Bearer_Token Text, Hashtag Text )')
     connection.commit()
     cursor.execute(
-        f'insert into Twitter values ( "{Consumer_Key}", "{Consumer_Secret}", "{Access_Token}", "{Access_Token_Secret}", "{hashtags}" )')
+        f'insert into Twitter values ( "{Consumer_Key}", "{Consumer_Secret}", "{Access_Token}", "{Access_Token_Secret}", "{Bearer_Token}", "{hashtags}" )')
     cursor.execute(f'update Apps set isInstalled = "Yes" where Platform = "Twitter"')
     connection.commit()
     connection.close()
@@ -67,7 +68,7 @@ def UploadToTwitter(Post, Image):
         data[2], data[3])
 
     api = tweepy.API(auth)
-    client = tweepy.Client(consumer_key=data[0], consumer_secret=data[1], access_token=data[2], access_token_secret=data[3])
+    client = tweepy.Client(consumer_key=data[0], consumer_secret=data[1], access_token=data[2], access_token_secret=data[3], bearer_token=data[4])
     if Image != "" and len(Post) != 0:
         mediaID = api.media_upload(Image)
         client.create_tweet(text=Post, media_ids=[mediaID.media_id_string])
@@ -85,7 +86,7 @@ def AddHashtagsToPost(Post):
     cursor = connection.cursor()
     data = cursor.execute('select * from Twitter').fetchall()[0]
     connection.close()
-    return f'{Post}\n\n{data[4]} #detop'
+    return f'{Post}\n\n{data[5]} #detop'
 
     
 
@@ -94,7 +95,7 @@ def AddHashtag():
     cursor = connection.cursor()
     data = cursor.execute('select * from Twitter').fetchall()[0]
     config = cursor.execute('select * from "Bot Config"').fetchall()[0]
-    new_Hashtags = pg.prompt("Edit/Add New Hashtags for Twitter", config[0], data[4])
+    new_Hashtags = pg.prompt("Edit/Add New Hashtags for Twitter", config[0], data[5])
     if new_Hashtags != None:
         overallHashtag = ""
         for i in str(new_Hashtags).split(" "):
@@ -104,6 +105,36 @@ def AddHashtag():
                     overallHashtag += f'#{listStr[0]} #{listStr[1]}'
                 else:
                     overallHashtag += f'{i} '
-        cursor.execute(f'update Twitter set "Hashtag" = "{overallHashtag}" where "Hashtag" = "{data[4]}"')
+        cursor.execute(f'update Twitter set "Hashtag" = "{overallHashtag}" where "Hashtag" = "{data[5]}"')
         connection.commit()
     connection.close()
+
+def deleteTweets():
+    connection = sqlite3.connect('AutoPoster.db')
+    cursor = connection.cursor()
+    data = cursor.execute('select * from Twitter').fetchall()[0]
+    config = cursor.execute('select * from "Bot Config"').fetchall()[0]
+    auth = tweepy.OAuthHandler(
+        data[0], data[1])
+    auth.set_access_token(
+        data[2], data[3])
+
+    api = tweepy.API(auth)
+    client = tweepy.Client(
+        consumer_key=data[0], consumer_secret=data[1], access_token=data[2], access_token_secret=data[3], bearer_token=data[4])
+    option = pg.confirm("On which basis you want to Delete your Tweets??", config[0], buttons=["Based on Likes", "Based on Comments", "Based on ReTweets", "Manually Select which Tweets to Delete"])
+    if option == "Based on Likes":
+        userID = client.get_me()[0]["id"]
+        tweets = client.get_users_tweets(
+            id=userID, max_results=100, exclude="replies")
+        for i in tweets[0]:
+            print(client.get_tweet(i["id"], tweet_fields=["created_at"])[1])
+            # print(i["id"])
+    elif option == "Based on Comments":
+        pass
+    elif option == "Based on ReTweets":
+        pass
+    elif option == "Manually Select which Tweets to Delete":
+        pass
+
+deleteTweets()
