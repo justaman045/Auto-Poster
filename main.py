@@ -12,6 +12,12 @@ except ModuleNotFoundError:
     print("\n\n\n\nPlease Restart this Software\n\n\n\nThanks for your Co-operation")
     exit()
 
+if os.environ.get('DISPLAY', '') == '':
+    print('no display found. Using :0.0')
+    os.environ.__setitem__('DISPLAY', ':0.0')
+else:
+    SystemExit()
+
 def printMSG(message):
     space = int(len(message)+6)
     preStoredMessage = 'A new Update is available use `git pull` command to update'
