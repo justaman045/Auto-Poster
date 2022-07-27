@@ -13,8 +13,9 @@ except ModuleNotFoundError:
     exit()
 
 if os.environ.get('DISPLAY', '') == '':
-    print('no display found. Using :0.0')
-    os.environ.__setitem__('DISPLAY', ':0.0')
+    # create virtual display with size 1600x1200 and 16 bit color. Color can be changed to 24 or 8
+    os.system('Xvfb :1 -screen 0 1600x1200x16  &')
+    os.environ['DISPLAY'] = ':1.0'
 else:
     SystemExit()
 
