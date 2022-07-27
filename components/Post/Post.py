@@ -43,7 +43,7 @@ def Post():
         else:
             PlatformsToUploadImagess = GetPlatformsImages()
     except:
-        exit()
+        SystemExit()
     finally:
         if Post != None or Image != None:
             PostOnSocials(Post, Image, PlatformsToUploadImagess, PlatformsToUploads)

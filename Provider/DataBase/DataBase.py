@@ -27,8 +27,11 @@ class DataBase:
             connection.commit()
         Data = cursor.execute('select * from "Bot Config"').fetchall()
         if len(Data) == 0:
-            BotName = pg.prompt("Enter the Bot Name",
-                                "Enter the Bot Name", f"{os.getlogin()}'s Bot")
+            try:
+                BotName = pg.prompt("Enter the Bot Name",
+                                    "Enter the Bot Name", f"{os.getlogin()}'s Bot")
+            except OSError:
+                BotName = "Detop"
             SqlStatements = [
                 f"insert into 'Bot Config' values ( '{BotName}', '{BotVersion}' )",
             ]

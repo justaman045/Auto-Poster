@@ -137,4 +137,4 @@ def deleteTweets():
     elif option == "Manually Select which Tweets to Delete":
         pass
 
-deleteTweets()
+# deleteTweets()
