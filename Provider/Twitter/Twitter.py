@@ -129,4 +129,4 @@ def deleteTweets():
     for i in tweets[0]:
         tweetsli.append(i["text"])
 
-deleteTweets()
+# deleteTweets()
