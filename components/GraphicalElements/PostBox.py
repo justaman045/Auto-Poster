@@ -231,4 +231,5 @@ def MultiPurposeOptionBox(title, options, ErrorMsg):
     root.mainloop()
 
 
-# MultiPurposeOptionBox("Hello")
+# MultiPurposeOptionBox("Hello", [
+#                       "Hey", 'world', "how", 'are', 'you'], "")

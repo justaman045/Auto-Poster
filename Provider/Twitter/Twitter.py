@@ -3,6 +3,7 @@ import pymsgbox as pg
 import pyperclip as clip
 import tweepy
 
+from components.GraphicalElements.PostBox import MultiPurposeOptionBox
 
 def APISetup():
     connection = sqlite3.connect('AutoPoster.db')
@@ -118,23 +119,14 @@ def deleteTweets():
         data[0], data[1])
     auth.set_access_token(
         data[2], data[3])
-
+ 
     api = tweepy.API(auth)
     client = tweepy.Client(
         consumer_key=data[0], consumer_secret=data[1], access_token=data[2], access_token_secret=data[3], bearer_token=data[4])
-    option = pg.confirm("On which basis you want to Delete your Tweets??", config[0], buttons=["Based on Likes", "Based on Comments", "Based on ReTweets", "Manually Select which Tweets to Delete"])
-    if option == "Based on Likes":
-        userID = client.get_me()[0]["id"]
-        tweets = client.get_users_tweets(
-            id=userID, max_results=100, exclude="replies")
-        for i in tweets[0]:
-            print(client.get_tweet(i["id"], tweet_fields=["created_at"])[1])
-            # print(i["id"])
-    elif option == "Based on Comments":
-        pass
-    elif option == "Based on ReTweets":
-        pass
-    elif option == "Manually Select which Tweets to Delete":
-        pass
+    userID = client.get_me()[0]["id"]
+    tweets = client.get_users_tweets(id=userID, max_results=100, exclude="replies")
+    tweetsli= []
+    for i in tweets[0]:
+        tweetsli.append(i["text"])
 
-# deleteTweets()
+deleteTweets()
