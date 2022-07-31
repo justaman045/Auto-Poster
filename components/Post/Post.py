@@ -1,13 +1,20 @@
-import json
-import sqlite3
-import pyperclip as clip
-from Provider.Discord.Discord import sendDiscordMessage
-from Provider.Instagram.Instagram import UploadTOIG
-from Provider.Reddit.Reddit import GetRedditSub, GetRedditTags, Upload
-import pymsgbox as pg
-from Provider.Twitter.Twitter import AddHashtagsToPost, UploadToTwitter
+import os
 
-from components.GraphicalElements.PostBox import MultiPurposeOptionBox, PlatformsToUpload, PlatformsToUploadImages, PostBox
+try:
+    import sqlite3
+    import pyperclip as clip
+    from Provider.Discord.Discord import sendDiscordMessage
+    from Provider.Instagram.Instagram import UploadTOIG
+    from Provider.Reddit.Reddit import GetRedditSub, GetRedditTags, Upload
+    import pymsgbox as pg
+    from Provider.Twitter.Twitter import AddHashtagsToPost, UploadToTwitter
+
+    from components.GraphicalElements.PostBox import MultiPurposeOptionBox, PlatformsToUpload, PlatformsToUploadImages, PostBox
+except ModuleNotFoundError:
+    os.system(f'pip install -r requirements.txt')
+    os.system(f'python -m pip install --upgrade pip')
+    print("\n\n\n\nPlease Restart this Software\n\n\n\nThanks for your Co-operation")
+    exit()
 
 connection = sqlite3.connect('AutoPoster.db')
 cursor = connection.cursor()

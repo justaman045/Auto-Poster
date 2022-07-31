@@ -1,11 +1,19 @@
-import sqlite3
-from tkinter import *
-import pymsgbox as pg
-from Provider.Discord.Discord import AddChannel, GuidedInstallDiscord, UpdateAndDeleteDiscord, createDiscordConfig, deleteDiscordConfig
-from Provider.Instagram.Instagram import GuideInstagram, InstallInstagram, UpdateAndDeleteInstagram
+import os
 
-from Provider.Reddit.Reddit import CreateRedditConfig, DeleteRedditConfig, RedditGuideToInstall
-from Provider.Twitter.Twitter import APISetup, AddHashtag, InstallTwitter, UnInstallTwitter
+try:
+    import sqlite3
+    from tkinter import *
+    import pymsgbox as pg
+    from Provider.Discord.Discord import AddChannel, GuidedInstallDiscord, UpdateAndDeleteDiscord, createDiscordConfig, deleteDiscordConfig
+    from Provider.Instagram.Instagram import GuideInstagram, InstallInstagram, UpdateAndDeleteInstagram
+
+    from Provider.Reddit.Reddit import CreateRedditConfig, DeleteRedditConfig, RedditGuideToInstall
+    from Provider.Twitter.Twitter import APISetup, AddHashtag, InstallTwitter, UnInstallTwitter
+except ModuleNotFoundError:
+    os.system(f'pip install -r requirements.txt')
+    os.system(f'python -m pip install --upgrade pip')
+    print("\n\n\n\nPlease Restart this Software\n\n\n\nThanks for your Co-operation")
+    exit()
 
 def getApps():
     connection = sqlite3.connect('AutoPoster.db')

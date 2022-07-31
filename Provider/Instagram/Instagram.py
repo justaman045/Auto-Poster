@@ -1,18 +1,26 @@
 
-import sqlite3
-from tkinter.filedialog import askopenfilename
-from selenium import webdriver
-import time
-from selenium.webdriver.chrome.service import Service
-from webdriver_manager.chrome import ChromeDriverManager
-from selenium.webdriver.common.by import By
-import pymsgbox as pg
-import sqlite3
-from tkinter import *
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.wait import WebDriverWait
+import os
+
+try:
+    import sqlite3
+    from tkinter.filedialog import askopenfilename
+    from selenium import webdriver
+    import time
+    from selenium.webdriver.chrome.service import Service
+    from webdriver_manager.chrome import ChromeDriverManager
+    from selenium.webdriver.common.by import By
+    import pymsgbox as pg
+    import sqlite3
+    from tkinter import *
+    from selenium.webdriver.common.keys import Keys
+    from selenium.webdriver.support import expected_conditions as EC
+    from selenium.webdriver.common.by import By
+    from selenium.webdriver.support.wait import WebDriverWait
+except ModuleNotFoundError:
+    os.system(f'pip install -r requirements.txt')
+    os.system(f'python -m pip install --upgrade pip')
+    print("\n\n\n\nPlease Restart this Software\n\n\n\nThanks for your Co-operation")
+    exit()
 
 # # driverpth = "C:/Program Files/BraveSoftware/Brave-Browser/Application/brave.exe"
 # photopath = askopenfilename(filetypes=[("Select Images", ".png .jpg .jpeg")])
