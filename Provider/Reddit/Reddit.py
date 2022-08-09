@@ -1,13 +1,21 @@
-import random
-import socket
-import sqlite3
-import sys
-import webbrowser
-import pyperclip as clip
-import praw
-from tkinter import *
-from tkinter.scrolledtext import ScrolledText
-import pymsgbox as pg
+import os
+
+try:
+    import random
+    import socket
+    import sqlite3
+    import sys
+    import webbrowser
+    import pyperclip as clip
+    import praw
+    from tkinter import *
+    from tkinter.scrolledtext import ScrolledText
+    import pymsgbox as pg
+except ModuleNotFoundError:
+    os.system('pip install -r requirements.txt')
+    os.system('python -m pip install --upgrade pip')
+    print("\n\n\n\nPlease Restart this Software\n\n\n\nThanks for your Co-operation")
+    exit()
 
 
 # Get all the Subreddits which A User is into 

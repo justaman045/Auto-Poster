@@ -1,10 +1,18 @@
-import sqlite3
-import sys
-from tkinter import *
-from tkinter.filedialog import askopenfilename
-from tkinter.scrolledtext import ScrolledText
-import pyperclip as clip
-import pymsgbox as pg
+import os
+
+try:
+    import sqlite3
+    import sys
+    from tkinter import *
+    from tkinter.filedialog import askopenfilename
+    from tkinter.scrolledtext import ScrolledText
+    import pyperclip as clip
+    import pymsgbox as pg
+except ModuleNotFoundError:
+    os.system('pip install -r requirements.txt')
+    os.system('python -m pip install --upgrade pip')
+    print("\n\n\n\nPlease Restart this Software\n\n\n\nThanks for your Co-operation")
+    exit()
 
 
 def PostBox(title):
@@ -231,4 +239,5 @@ def MultiPurposeOptionBox(title, options, ErrorMsg):
     root.mainloop()
 
 
-# MultiPurposeOptionBox("Hello")
+# MultiPurposeOptionBox("Hello", [
+#                       "Hey", 'world', "how", 'are', 'you'], "")

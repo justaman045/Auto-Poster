@@ -1,12 +1,18 @@
-import pymsgbox as pg
-import json
 import os
-import sqlite3
-from tkinter.filedialog import askopenfilename
-from tkinter.scrolledtext import ScrolledText
-import requests, pymsgbox as pg
-from tkinter import *
-import pyperclip as clip
+
+try:
+    import pymsgbox as pg
+    import sqlite3
+    from tkinter.scrolledtext import ScrolledText
+    import requests
+    import pymsgbox as pg
+    from tkinter import *
+    import pyperclip as clip
+except ModuleNotFoundError:
+    os.system('pip install -r requirements.txt')
+    os.system('python -m pip install --upgrade pip')
+    print("\n\n\n\nPlease Restart this Software\n\n\n\nThanks for your Co-operation")
+    exit()
 
 # from components.GraphicalElements.PostBox import MultiPurposeOptionBox
 

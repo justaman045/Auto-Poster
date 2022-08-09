@@ -12,13 +12,6 @@ except ModuleNotFoundError:
     print("\n\n\n\nPlease Restart this Software\n\n\n\nThanks for your Co-operation")
     exit()
 
-if os.environ.get('DISPLAY', '') == '':
-    # create virtual display with size 1600x1200 and 16 bit color. Color can be changed to 24 or 8
-    os.system('Xvfb :1 -screen 0 1600x1200x16  &')
-    os.environ['DISPLAY'] = ':1.0'
-else:
-    SystemExit()
-
 def printMSG(message):
     space = int(len(message)+6)
     preStoredMessage = 'A new Update is available use `git pull` command to update'

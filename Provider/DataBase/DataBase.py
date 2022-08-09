@@ -1,6 +1,13 @@
 import os
-import sqlite3
-import pymsgbox as pg
+
+try:
+    import sqlite3
+    import pymsgbox as pg
+except ModuleNotFoundError:
+    os.system('pip install -r requirements.txt')
+    os.system('python -m pip install --upgrade pip')
+    print("\n\n\n\nPlease Restart this Software\n\n\n\nThanks for your Co-operation")
+    exit()
 
 from BotVersion import BotVersion as version
 
