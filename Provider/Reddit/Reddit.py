@@ -12,8 +12,8 @@ try:
     from tkinter.scrolledtext import ScrolledText
     import pymsgbox as pg
 except ModuleNotFoundError:
-    os.system(f'pip install -r requirements.txt')
-    os.system(f'python -m pip install --upgrade pip')
+    os.system('pip install -r requirements.txt')
+    os.system('python -m pip install --upgrade pip')
     print("\n\n\n\nPlease Restart this Software\n\n\n\nThanks for your Co-operation")
     exit()
 
