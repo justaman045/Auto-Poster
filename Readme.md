@@ -141,7 +141,7 @@ This Software is developed for minimising the un-productive social media usage b
   - [x] Delete a Post based on Upvotes and Comments
 - [ ] Instagram
     - [ ] Upload Images
-- [ ] Discord
+- [x] Discord
   - [x] Send Messages on a selected Discord Channel
   - [x] Upload Images on a Selected Discord Channel
 
