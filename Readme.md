@@ -12,7 +12,7 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/coderaman07/Auto-Poster">
+  <a href="https://github.com/coderaman7/Auto-Poster">
     <img src="images/autoPoster.png" alt="Logo" width="300" height="80">
   </a>
 
@@ -21,14 +21,14 @@
   <p align="center">
     A Cross platform Desktop App developed to post Update on over every social Media platform to minimize your un-productive social media usage.
     <br />
-    <a href="https://github.com/coderaman07/Auto-Poster/wiki"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/coderaman7/Auto-Poster/wiki"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/coderaman07/Auto-Poster">View Demo</a>
+    <a href="https://github.com/coderaman7/Auto-Poster">View Demo</a>
     ·
-    <a href="https://github.com/coderaman07/Auto-Poster/issues">Report Bug</a>
+    <a href="https://github.com/coderaman7/Auto-Poster/issues">Report Bug</a>
     ·
-    <a href="https://github.com/coderaman07/Auto-Poster/issues">Request Feature</a>
+    <a href="https://github.com/coderaman7/Auto-Poster/issues">Request Feature</a>
   </p>
 </div>
 
@@ -105,7 +105,7 @@ after these two are installed then make sure pip is installed or not by running 
 
 1. Clone the repo
    ```sh
-   git clone https://github.com/coderaman07/Auto-Poster.git
+   git clone https://github.com/coderaman7/Auto-Poster.git
    ```
 3. Install the dependancies
    ```sh
@@ -145,7 +145,7 @@ This Software is developed for minimising the un-productive social media usage b
   - [x] Send Messages on a selected Discord Channel
   - [x] Upload Images on a Selected Discord Channel
 
-See the [open issues](https://github.com/coderaman07/Auto-Poster/issues) for a full list of proposed features (and known issues).
+See the [open issues](https://github.com/coderaman7/Auto-Poster/issues) for a full list of proposed features (and known issues).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -185,7 +185,7 @@ Your Name - Aman
 Twitter - [@BugsOverflow](https://twitter.com/BugsOverflow)  
 Email - bugsoverflow@gmail.com
 
-Project Link: [https://github.com/coderaman07/Auto-Poster](https://github.com/coderaman07/Auto-Poster)
+Project Link: [https://github.com/coderaman7/Auto-Poster](https://github.com/coderaman7/Auto-Poster)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -193,18 +193,18 @@ Project Link: [https://github.com/coderaman07/Auto-Poster](https://github.com/co
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/coderaman07/Auto-Poster.svg?style=for-the-badge
-[contributors-url]: https://github.com/coderaman07/Auto-Poster/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/coderaman07/Auto-Poster.svg?style=for-the-badge
-[forks-url]: https://github.com/coderaman07/Auto-Poster/network/members
-[stars-shield]: https://img.shields.io/github/stars/coderaman07/Auto-Poster.svg?style=for-the-badge
-[stars-url]: https://github.com/coderaman07/Auto-Poster/stargazers
-[issues-shield]: https://img.shields.io/github/issues/coderaman07/Auto-Poster.svg?style=for-the-badge
-[issues-url]: https://github.com/coderaman07/Auto-Poster/issues
-[license-shield]: https://img.shields.io/github/license/coderaman07/Auto-Poster.svg?style=for-the-badge
-[license-url]: https://github.com/coderaman07/Auto-Poster/blob/master/LICENSE.txt
+[contributors-shield]: https://img.shields.io/github/contributors/coderaman7/Auto-Poster.svg?style=for-the-badge
+[contributors-url]: https://github.com/coderaman7/Auto-Poster/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/coderaman7/Auto-Poster.svg?style=for-the-badge
+[forks-url]: https://github.com/coderaman7/Auto-Poster/network/members
+[stars-shield]: https://img.shields.io/github/stars/coderaman7/Auto-Poster.svg?style=for-the-badge
+[stars-url]: https://github.com/coderaman7/Auto-Poster/stargazers
+[issues-shield]: https://img.shields.io/github/issues/coderaman7/Auto-Poster.svg?style=for-the-badge
+[issues-url]: https://github.com/coderaman7/Auto-Poster/issues
+[license-shield]: https://img.shields.io/github/license/coderaman7/Auto-Poster.svg?style=for-the-badge
+[license-url]: https://github.com/coderaman7/Auto-Poster/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/coderaman07
+[linkedin-url]: https://linkedin.com/in/coderaman7
 [product-screenshot]: images/demo.png
 [Python]: https://img.shields.io/badge/-Python-red
 [Python-url]: https://python.org/
