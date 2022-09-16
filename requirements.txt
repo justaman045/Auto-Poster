@@ -6,7 +6,7 @@ charset-normalizer==2.0.12
 cryptography==37.0.2
 h11==0.13.0
 idna==3.3
-oauthlib==3.2.0
+oauthlib==3.2.1
 outcome==1.1.0
 praw==7.6.0
 prawcore==2.3.0
