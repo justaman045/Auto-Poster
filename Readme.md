@@ -139,6 +139,7 @@ This Software is developed for minimising the un-productive social media usage b
   - [x] keep a list of banned sub reddits and Not able to Post on Sub reddits
   - [ ] Delete a Post using manual selection
   - [x] Delete a Post based on Upvotes and Comments
+  - [x] Download Saved Vids
 - [ ] Instagram
     - [ ] Upload Images
 - [x] Discord
