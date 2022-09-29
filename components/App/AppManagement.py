@@ -1,4 +1,4 @@
-import os
+from components.Module_Installer.main import InstallAllModules
 
 try:
     import sqlite3
@@ -10,10 +10,7 @@ try:
     from Provider.Reddit.Reddit import CreateRedditConfig, DeleteRedditConfig, RedditGuideToInstall
     from Provider.Twitter.Twitter import APISetup, AddHashtag, InstallTwitter, UnInstallTwitter
 except ModuleNotFoundError:
-    os.system('pip install -r requirements.txt')
-    os.system('python -m pip install --upgrade pip')
-    print("\n\n\n\nPlease Restart this Software\n\n\n\nThanks for your Co-operation")
-    exit()
+    InstallAllModules()
 
 def getApps():
     connection = sqlite3.connect('AutoPoster.db')
@@ -49,7 +46,7 @@ def getApps():
         if App == 'Discord':
             return deleteDiscordConfig()
         if App == 'Instagram':
-            return deleteDiscordConfig()
+            return UpdateAndDeleteInstagram()
 
     def CreateConfig(AppName, guided = False):
         for App in Apps:
