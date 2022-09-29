@@ -1,17 +1,17 @@
-import os
+from components.Inside_Tester.main import CheckForDevAccounts, InsideTester
 from Provider.DataBase.DataBase import DataBase
 from BotVersion import BotVersion as version
 import sqlite3
 from components.Module_Installer.main import InstallAllModules
+from components.Update_Script.main import Update, checkUpdateAndUpdate
 
 try:
     import pymsgbox as pg
 except ModuleNotFoundError:
     InstallAllModules()
 
-
-
-BotVersion = version
+checkUpdateAndUpdate()
+CheckForDevAccounts()
 
 connection = sqlite3.connect('AutoPoster.db')
 cursor = connection.cursor()
@@ -25,12 +25,17 @@ connection.close()
 def startTheBot():
     BotName = config[0][0]
     choice = pg.confirm(BotName, BotName,
-               buttons=["Post", "App Management"])
+               buttons=["Post", "Inside Tester", "App Management"])
     if choice == "Post":
         components.Post.Post.Post()
     elif choice == "App Management":
         try:
             getApps()
+        finally:
+            startTheBot()
+    elif choice == "Inside Tester":
+        try:
+            InsideTester()
         finally:
             startTheBot()
     else:
