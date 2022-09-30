@@ -19,7 +19,7 @@
 <h3 align="center">Auto Poster</h3>
 
   <p align="center">
-    A Cross platform Desktop App developed to post Update on over every social Media platform to minimize your un-productive social media usage.
+    A Cross-platform Desktop App developed to post Updates on over every social media platform to minimize your un-productive social media usage.
     <br />
     <a href="https://github.com/coderaman7/Auto-Poster/wiki"><strong>Explore the docs »</strong></a>
     <br />
@@ -90,7 +90,7 @@ To get a local copy up and running follow these simple example steps.
 
 ### Prerequisites
 
-All this depenacies which are required are listed below to start the Installation of this software
+All these dependencies which are required are listed below to start the Installation of this software
 * `git`
 * `Python`
 
@@ -100,18 +100,18 @@ after these two are installed then make sure pip is installed or not by running 
 
 ### Installation
 
-- *Though it is recommennded to use virtualenv and create a shell script for Linux/Mac or edit the main.bat file accordingly in Windows*  
-- *This software is made with precausion to install the dependancy if not already avavialble*
+- *Though it is recommended to use virtualenv and create a shell script for Linux/Mac or edit the main.bat file accordingly in Windows*  
+- *This software is made with precaution to install the dependency if not already available*
 
 1. Clone the repo
    ```sh
    git clone https://github.com/coderaman7/Auto-Poster.git
    ```
-3. Install the dependancies
+3. Install the dependencies
    ```sh
    pip install -r requirements.txt 
    ```
-4. API key management is avavialble inside the application so use the `App Management section`
+4. API key management is available inside the application so use the `App Management section`
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -120,7 +120,7 @@ after these two are installed then make sure pip is installed or not by running 
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-This Software is developed for minimising the un-productive social media usage by us. Now to post any kind of update on the Social Media all we have to do is open this write the post and select the social media onto which we want to update and click Post, and you're done posting on sevral social media platforms._
+This Software is developed to minimize our un-productive social media usage by us. Now to post any kind of update on the Social Media all we have to do is open this write the post and select the social media onto which we want to update and click Post, and you're done posting on several social media platforms._
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -131,20 +131,33 @@ This Software is developed for minimising the un-productive social media usage b
 
 - [ ] Twitter
   - [x] Post on Twitter without elevated access
-  - [x] Upload Images in a tweet without v2 endpoint ( which requires elevated Access ).
+  - [x] Upload Images in a tweet without a v2 endpoint ( which requires elevated Access ).
   - [ ] Delete a Tweet ( selective using option Box )
   - [ ] Delete a Post based on Likes and Comments
 - [ ] Reddit
   - [x] Post onto Subreddits
-  - [x] keep a list of banned sub reddits and Not able to Post on Sub reddits
+  - [x] keep a list of banned subreddits and Not able to Post on Sub Reddit
   - [ ] Delete a Post using manual selection
   - [x] Delete a Post based on Upvotes and Comments
   - [x] Download Saved Vids
 - [ ] Instagram
+    - [x] Hidden Under Inside Testing Mode Option
     - [ ] Upload Images
 - [x] Discord
   - [x] Send Messages on a selected Discord Channel
   - [x] Upload Images on a Selected Discord Channel
+- [ ] Facebook
+  - [ ] Still to Implement but right now focusing on Instagram
+- [x] Koo
+  - [x] No Users in currently subscribed People on [Projekt Notifier](https://projektnotify.vercel.app)
+- [x] Pinterest
+  - [x] No Users in currently subscribed People on [Projekt Notifier](https://projektnotify.vercel.app)
+- [x] YouTube
+  - [x] This bot can lead to low user interaction for any creator
+- [x] Tumblr
+  - [x] In future Update after Instagram
+- [x] Telegram
+  - [x] Telegram can be a bit difficult for users to set up. But will be available on Request
 
 See the [open issues](https://github.com/coderaman7/Auto-Poster/issues) for a full list of proposed features (and known issues).
 
@@ -155,14 +168,14 @@ See the [open issues](https://github.com/coderaman7/Auto-Poster/issues) for a fu
 <!-- CONTRIBUTING -->
 ## Contributing
 
-Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+Contributions are what makes the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
 If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
 Don't forget to give the project a star! Thanks again!
 
 1. Fork the Project
 2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
 4. Push to the Branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 

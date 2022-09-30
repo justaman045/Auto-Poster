@@ -1,4 +1,5 @@
-import os
+from components.Inside_Tester.main import NoDevFeature
+from components.Module_Installer.main import InstallAllModules
 
 try:
     import sqlite3
@@ -10,10 +11,7 @@ try:
     from Provider.Reddit.Reddit import CreateRedditConfig, DeleteRedditConfig, RedditGuideToInstall
     from Provider.Twitter.Twitter import APISetup, AddHashtag, InstallTwitter, UnInstallTwitter
 except ModuleNotFoundError:
-    os.system('pip install -r requirements.txt')
-    os.system('python -m pip install --upgrade pip')
-    print("\n\n\n\nPlease Restart this Software\n\n\n\nThanks for your Co-operation")
-    exit()
+    InstallAllModules()
 
 def getApps():
     connection = sqlite3.connect('AutoPoster.db')
@@ -49,7 +47,7 @@ def getApps():
         if App == 'Discord':
             return deleteDiscordConfig()
         if App == 'Instagram':
-            return deleteDiscordConfig()
+            return UpdateAndDeleteInstagram()
 
     def CreateConfig(AppName, guided = False):
         for App in Apps:
@@ -86,34 +84,35 @@ def getApps():
     scroll_y = Scrollbar(root, orient="vertical", command=canvas.yview)
 
     for App in Apps:
-        AppLabel = Label(frame, text=App[0], height=5)
-        AppLabel.grid()
-        Labelf = Message(frame, text=App[2], width=300)
-        Labelf.grid(row=tempPlace, padx=5)
-        if App[1] == 'No':
-            Button(frame, command=lambda m=App[0]: CreateConfig(m, True),
-                   text="Install with Guide").grid(row=tempPlacee, column=1, padx=(90, 0))
-            Button(frame, command=lambda m=App[0]: CreateConfig(m),
-                   text="Install").grid(row=tempPlacee, column=2)
-        elif App[1] == "Yes":
-            Button(frame, command=lambda m=App[0]: CreateConfig(m),
-                   text="Uninstall").grid(row=tempPlacee, column=2)
-            if App[0] == "Twitter":
-                Button(frame, command=lambda m=App[0]: AddHashtag(),
-                    text="Add Hashtags").grid(row=tempPlacee, column=1, padx=(90, 0))
-            if App[0] == "Discord":
-                Button(frame, command=lambda m=App[0]: AddChannel(),
-                    text="Add Channels").grid(row=tempPlacee, column=1, padx=(0, 105))
-                Button(frame, command=lambda m=App[0]: UpdateAndDeleteDiscord(),
-                    text="Edit Configuration").grid(row=tempPlacee, column=1, padx=(90, 0))
-            if App[0] == "Instagram":
-                Button(frame, command=lambda m=App[0]: InstallInstagram(),
-                    text="Add Accounts").grid(row=tempPlacee, column=1, padx=(0, 105))
-                Button(frame, command=lambda m=App[0]: UpdateAndDeleteInstagram(),
-                       text="Edit Configuration").grid(row=tempPlacee, column=1, padx=(90, 0))
+        if NoDevFeature(App[0]):
+            AppLabel = Label(frame, text=App[0], height=5)
+            AppLabel.grid()
+            Labelf = Message(frame, text=App[2], width=300)
+            Labelf.grid(row=tempPlace, padx=5)
+            if App[1] == 'No':
+                Button(frame, command=lambda m=App[0]: CreateConfig(m, True),
+                    text="Install with Guide").grid(row=tempPlacee, column=1, padx=(90, 0))
+                Button(frame, command=lambda m=App[0]: CreateConfig(m),
+                    text="Install").grid(row=tempPlacee, column=2)
+            elif App[1] == "Yes":
+                Button(frame, command=lambda m=App[0]: CreateConfig(m),
+                    text="Uninstall").grid(row=tempPlacee, column=2)
+                if App[0] == "Twitter":
+                    Button(frame, command=lambda m=App[0]: AddHashtag(),
+                        text="Add Hashtags").grid(row=tempPlacee, column=1, padx=(90, 0))
+                if App[0] == "Discord":
+                    Button(frame, command=lambda m=App[0]: AddChannel(),
+                        text="Add Channels").grid(row=tempPlacee, column=1, padx=(0, 105))
+                    Button(frame, command=lambda m=App[0]: UpdateAndDeleteDiscord(),
+                        text="Edit Configuration").grid(row=tempPlacee, column=1, padx=(90, 0))
+                if App[0] == "Instagram":
+                    Button(frame, command=lambda m=App[0]: InstallInstagram(),
+                        text="Add Accounts").grid(row=tempPlacee, column=1, padx=(0, 105))
+                    Button(frame, command=lambda m=App[0]: UpdateAndDeleteInstagram(),
+                        text="Edit Configuration").grid(row=tempPlacee, column=1, padx=(90, 0))
 
-        tempPlace += 2
-        tempPlacee += 2
+            tempPlace += 2
+            tempPlacee += 2
 
     canvas.create_window(0, 0, anchor='nw', window=frame, width=600)
     canvas.update_idletasks()
