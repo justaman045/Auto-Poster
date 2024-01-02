@@ -228,3 +228,8 @@ Project Link: [https://github.com/coderaman7/Auto-Poster](https://github.com/cod
 [Tweepy-url]: https://docs.tweepy.org/en/stable/
 [PRAW]: https://img.shields.io/badge/-PRAW-lightgrey
 [PRAW-url]: https://praw.readthedocs.io/en/stable/
+
+
+ToDo
+Make a damn good Documentation for this
+No Image Upload in Discord

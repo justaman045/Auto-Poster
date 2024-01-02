@@ -1,4 +1,5 @@
 import os
+from components.Module_Installer.main import InstallAllModules
 
 try:
     import pymsgbox as pg
@@ -9,21 +10,23 @@ try:
     from tkinter import *
     import pyperclip as clip
 except ModuleNotFoundError:
-    os.system('pip install -r requirements.txt')
-    os.system('python -m pip install --upgrade pip')
-    print("\n\n\n\nPlease Restart this Software\n\n\n\nThanks for your Co-operation")
-    exit()
+    InstallAllModules()
 
 # from components.GraphicalElements.PostBox import MultiPurposeOptionBox
 
 
-def sendMSG(message, authorization, channelID, image):
+def sendMSG(message, authorization, channelID, image, videos):
     payload = {
         'content': message
     }
     if image != "":
         files = {
             'file': (image, open(image, 'rb')),
+
+        }
+    else:
+        files = {
+            'file': (videos, open(videos, 'rb')),
 
         }
     header = {
@@ -107,7 +110,7 @@ def MultiPurposeOptionBox(title, options, ErrorMsg):
     root.mainloop()
 
 
-def sendDiscordMessage(Post, Image, discordConfig, channels):
+def sendDiscordMessage(Post, Image, Videos, discordConfig, channels):
     connection = sqlite3.connect('AutoPoster.db')
     cursor = connection.cursor()
     config = cursor.execute('select * from "Bot Config"').fetchall()[0]
@@ -122,7 +125,7 @@ def sendDiscordMessage(Post, Image, discordConfig, channels):
     for chan in authorizationKeys:
         for channe in channels:
             if channe == chan[3]:
-                sendMSG(Post, chan[1], chan[2], Image)
+                sendMSG(Post, chan[1], chan[2], Image, Videos)
     
 def deleteDiscordConfig():
     connection = sqlite3.connect('AutoPoster.db')

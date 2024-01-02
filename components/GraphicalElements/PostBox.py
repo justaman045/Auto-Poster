@@ -21,16 +21,21 @@ def PostBox(title):
     root.title(title)
     root.resizable(width=False, height=False)
     PathOfImage = StringVar()
+    PathOfVideos = StringVar()
     Pos = StringVar()
 
     def GetImage():
         pathOfImage = askopenfilename(filetypes=[("Select Images", ".png .jpg .jpeg")])
         PathOfImage.set(pathOfImage)
 
+    def GetVideos():
+        pathOfVideos = askopenfilename(filetypes=[("Select Images", ".mov .mp4 .mkv .ts")])
+        PathOfVideos.set(pathOfVideos)
+
     def MoveToNext():
         Post = textbox.get(1.0, "end-1c")
         Pos.set(Post)
-        clip.copy(f"{Pos.get()}+{PathOfImage.get()}")
+        clip.copy(f"{Pos.get()}+{PathOfImage.get()}+{PathOfVideos.get()}")
         root.destroy()
 
     def keyPressed(e):
@@ -77,13 +82,20 @@ def PostBox(title):
     btn = Button(root, text="Select Image", command=GetImage)
     btn.place(x=30, y=325)
 
+    btn2 = Button(root, text="Select Videos", command=GetVideos)
+    btn2.place(x=30, y=355)
+
     labl = Label(root, text=f"Particularly For Instagram and Snapchat")
     labl.config(font=("Courier", 11))
     labl.place(x=115, y=325)
 
+    labl = Label(root, text=f"Particularly For Instagram and Snapchat")
+    labl.config(font=("Courier", 11))
+    labl.place(x=115, y=355)
+
     labl3 = Label(root, text=f"You've got 280 Charecters left")
     labl3.config(font=("Courier", 11))
-    labl3.place(x=90, y=375)
+    labl3.place(x=90, y=390)
     textbox.bind('<KeyPress>', keyPressed)
 
     btn3 = Button(root, text="Next", command=MoveToNext)
@@ -91,7 +103,7 @@ def PostBox(title):
 
     root.mainloop()
 
-def PlatformsToUpload(Image):
+def PlatformsToUpload(length):
     root = Tk()
     root.geometry("500x500")
     root.title("Select the Platforms to Upload")
@@ -114,10 +126,11 @@ def PlatformsToUpload(Image):
     connection.close()
 
     for i in Apps:
+        print(i)
         if str(i[1]) == "Yes":
-            if len(Image) == 0 and i[0] not in ['Instagram']:
+            if length == 0:
                 InstalledApps.append(i[0])
-            elif len(Image) != 0:
+            elif length != 0:
                 InstalledApps.append(i[0])
     optionCheckBox = {}
 

@@ -1,4 +1,5 @@
 import os
+from components.Module_Installer.main import InstallAllModules
 
 try:
     import sqlite3
@@ -6,10 +7,7 @@ try:
     import pyperclip as clip
     import tweepy
 except ModuleNotFoundError:
-    os.system('pip install -r requirements.txt')
-    os.system('python -m pip install --upgrade pip')
-    print("\n\n\n\nPlease Restart this Software\n\n\n\nThanks for your Co-operation")
-    exit()
+    InstallAllModules()
 
 from components.GraphicalElements.PostBox import MultiPurposeOptionBox
 
@@ -66,7 +64,7 @@ def UnInstallTwitter():
     return "Done"
 
 
-def UploadToTwitter(Post, Image):
+def UploadToTwitter(Post, Image, Videos):
     connection = sqlite3.connect('AutoPoster.db')
     cursor = connection.cursor()
     data = cursor.execute('select * from Twitter').fetchall()[0]
@@ -79,7 +77,10 @@ def UploadToTwitter(Post, Image):
     api = tweepy.API(auth)
     client = tweepy.Client(consumer_key=data[0], consumer_secret=data[1], access_token=data[2], access_token_secret=data[3], bearer_token=data[4])
     if Image != "" and len(Post) != 0:
-        mediaID = api.media_upload(Image)
+        if Image == "" or Image == None:
+            mediaID = api.media_upload(Videos)
+        else:
+            mediaID = api.media_upload(Image)
         client.create_tweet(text=Post, media_ids=[mediaID.media_id_string])
     elif len(Post) == 0 and Image != "":
         mediaID = api.media_upload(Image)

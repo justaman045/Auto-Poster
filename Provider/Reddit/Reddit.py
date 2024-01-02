@@ -2,6 +2,7 @@ import json
 import os
 import re
 import sys
+from components.Module_Installer.main import InstallAllModules
 
 try:
     import random
@@ -17,10 +18,7 @@ try:
     import urllib.request
     import requests
 except ModuleNotFoundError:
-    os.system('pip install -r requirements.txt')
-    os.system('python -m pip install --upgrade pip')
-    print("\n\n\n\nPlease Restart this Software\n\n\n\nThanks for your Co-operation")
-    exit()
+    InstallAllModules()
 
 
 # Get all the Subreddits which A User is into 
@@ -89,7 +87,7 @@ def GetRedditSub(options: list):
 
 
 # Function to Post on Reddit Recursivly 
-def PostOnReddit(title: str, subReddits: str, message: str, pathOfImage: str):
+def PostOnReddit(title: str, subReddits: str, message: str, pathOfImage: str, pathOfVideos: str):
 
     # Creating connection from the DataBase 
     connection = sqlite3.connect('AutoPoster.db')
@@ -135,9 +133,11 @@ def PostOnReddit(title: str, subReddits: str, message: str, pathOfImage: str):
                 if len(message) > 0:
                     subreddit.submit(title, selftext=message)
                     pass
-                else:
+                elif pathOfImage != None or pathOfImage == "":
                     subreddit.submit_image(title, pathOfImage)
                     pass
+                else:
+                    subreddit.submit_video(title, pathOfVideos)
 
                 # After Posting print the message that it has been posted else it might have been black listed 
                 print(f"Successfully Posted in {i}")
@@ -157,11 +157,11 @@ def PostOnReddit(title: str, subReddits: str, message: str, pathOfImage: str):
 
 
 # A Function which recives the particular Information from the Main Post Area and Posts eveything by calling the PostOnReddit function 
-def Upload(title: str, message: str, pathOfImage: str, subReddits: str):
+def Upload(title: str, message: str, pathOfImage: str, pathOfVideos: str, subReddits: str):
 
     # Call the PostOnReddit Function to Upload 
     PostOnReddit(title=title, subReddits=subReddits,
-                 message=message, pathOfImage=pathOfImage)
+                 message=message, pathOfImage=pathOfImage, pathOfVideos=pathOfVideos)
 
 
 # A Basic Guide to Install the Reddit Module 

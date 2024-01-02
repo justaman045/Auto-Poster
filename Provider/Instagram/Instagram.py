@@ -1,110 +1,47 @@
 
 import os
+# from components.Module_Installer.main import InstallAllModules
 
 try:
     import sqlite3
     from tkinter.filedialog import askopenfilename
-    from selenium import webdriver
-    import time
-    from selenium.webdriver.chrome.service import Service
-    from webdriver_manager.chrome import ChromeDriverManager
-    from selenium.webdriver.common.by import By
     import pymsgbox as pg
-    import sqlite3
     from tkinter import *
-    from selenium.webdriver.common.keys import Keys
-    from selenium.webdriver.support import expected_conditions as EC
-    from selenium.webdriver.common.by import By
-    from selenium.webdriver.support.wait import WebDriverWait
+    import instagrapi as insta
 except ModuleNotFoundError:
-    os.system('pip install -r requirements.txt')
-    os.system('python -m pip install --upgrade pip')
-    print("\n\n\n\nPlease Restart this Software\n\n\n\nThanks for your Co-operation")
-    exit()
+    # InstallAllModules()
+    pass
 
 # # driverpth = "C:/Program Files/BraveSoftware/Brave-Browser/Application/brave.exe"
 # photopath = askopenfilename(filetypes=[("Select Images", ".png .jpg .jpeg")])
 # phototext = "Testing the Image"
 
 
-def UploadTOIG(Image, description, username):
+def UploadTOIG(Image, videos, description, username):
     if len(username) != 1:
         for i in username:
-            UploadToInstagram(Image, description, i)
+            UploadToInstagram(Image, videos, description, i)
     else:
-        UploadToInstagram(Image, description, username[0])
+        UploadToInstagram(Image, videos, description, username[0])
 
-def UploadToInstagram(Image, description, username):
+def UploadToInstagram(Image, videos, description, username):
     connection = sqlite3.connect('AutoPoster.db')
     cursor = connection.cursor()
     config = cursor.execute('select * from "Bot Config"').fetchall()[0]
     userdetails = cursor.execute(f'select * from Instagram where username="{username}"').fetchall()
     username = userdetails[0][0]
     passwd = userdetails[0][1]
-    driverpth = userdetails[0][2]
-    # exit()
-    option = webdriver.ChromeOptions()
-    option.binary_location = driverpth
-    option.add_argument("--incognito")
-    option.add_experimental_option('excludeSwitches', ['enable-logging'])
-    # option.add_argument("--headless")
-    browser = webdriver.Chrome(service=Service(
-        ChromeDriverManager().install()), options=option)
-    browser.maximize_window()
-    browser.get("https://instagram.com")
-    time.sleep(10)
-    browser.find_element(
-        By.NAME, "username").send_keys(username)
-    browser.find_element(
-        By.NAME, 'password').send_keys(passwd)
-    browser.find_element(
-        By.XPATH, "/html/body/div[1]/section/main/article/div[2]/div[1]/div[2]/form/div/div[3]/button/div").click()
-    time.sleep(5)
-    browser.get(f'https://instagram.com/{username}')
-    time.sleep(5)
-    browser.find_element(
-        By.CSS_SELECTOR, '[aria-label="New post"]').click()
-
-
-# To Stop until Loaded 
-
-# username = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, “input[name=’username’]”)))
-# password = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[name='password']")))
-# document.getElementsByTagName("input")[3].value
-    browser.find_element(
-        By.XPATH, '//*[@id="mount_0_0_AM"]/div/div[1]/div/div[2]/div/div/div[1]/div/div[3]/div/div/div/div/div/div/div/div/div[2]/div[1]/form/input').send_keys(Image)
-
-    time.sleep(200)
-
-    browser.find_element(
-        By.XPATH, "/html/body/div[6]/div[2]/div/div/div/div[1]/div/div/div[3]/div/button").click()
-
-    time.sleep(2)
-
-    browser.find_element(
-        By.XPATH, "/html/body/div[6]/div[2]/div/div/div/div[1]/div/div/div[3]/div/button").click()
-
-    time.sleep(2)
-
-    browser.find_element(
-        By.XPATH, "/html/body/div[6]/div[2]/div/div/div/div[2]/div[2]/div/div/div/div[2]/div[1]/textarea").send_keys(description)
-
-    time.sleep(2)
-
-    browser.find_element(
-        By.XPATH, "/html/body/div[6]/div[2]/div/div/div/div[1]/div/div/div[3]/div/button").click()
-
-    time.sleep(2)
-    ImageUploaded = False
-    while ImageUploaded == False:
-        try:
-            myElem = browser.find_element(
-                By.XPATH, "/html/body/div[6]/div[2]/div/div/div/div[2]/div[1]/div/img").click()
-            ImageUploaded = True
-        except:
-            time.sleep(5)
-            ImageUploaded = False
-    time.sleep(5)
+    client = insta.Client()
+    client.login(username=username, password=passwd)
+    client.dump_settings("./Provider/Instagram/dump.json")
+    client.get_timeline_feed()
+    if Image != None and Image != "":
+        client.photo_upload(caption=description, path=Image)
+    if videos != None and videos != "":
+        client.clip_upload(path=videos, caption=description)
+    exit()
+    
+    
 
 def InstallInstagram():
     connection = sqlite3.connect('AutoPoster.db')
@@ -212,4 +149,4 @@ def UpdateAndDeleteInstagram():
     root.mainloop()
 
 
-# UploadToInstagram(askopenfilename(filetypes=[("Select Images", ".png .jpg .jpeg")]), "Test Desc", "bugs_overflow")
+# UploadToInstagram(askopenfilename(filetypes=[("Select Images", ".png .jpg .jpeg .mov .mp4 .mkv .ts")]), "Test Desc", "1stay_consistent")

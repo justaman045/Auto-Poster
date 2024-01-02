@@ -1,71 +1,97 @@
-import os
+from components.Module_Installer.main import InstallAllModules
+from Provider.Discord.Discord import sendDiscordMessage
+from Provider.Instagram.Instagram import UploadTOIG
+from Provider.Reddit.Reddit import GetRedditSub, GetRedditTags, Upload
+from Provider.Twitter.Twitter import AddHashtagsToPost, UploadToTwitter
+from components.GraphicalElements.PostBox import MultiPurposeOptionBox, PlatformsToUpload, PlatformsToUploadImages, PostBox
 
 try:
     import sqlite3
     import pyperclip as clip
-    from Provider.Discord.Discord import sendDiscordMessage
-    from Provider.Instagram.Instagram import UploadTOIG
-    from Provider.Reddit.Reddit import GetRedditSub, GetRedditTags, Upload
     import pymsgbox as pg
-    from Provider.Twitter.Twitter import AddHashtagsToPost, UploadToTwitter
-
-    from components.GraphicalElements.PostBox import MultiPurposeOptionBox, PlatformsToUpload, PlatformsToUploadImages, PostBox
 except ModuleNotFoundError:
-    os.system('pip install -r requirements.txt')
-    os.system('python -m pip install --upgrade pip')
-    print("\n\n\n\nPlease Restart this Software\n\n\n\nThanks for your Co-operation")
-    exit()
+    InstallAllModules()
 
+# get the basics of bot e.g. name of bot, configuration 
 connection = sqlite3.connect('AutoPoster.db')
 cursor = connection.cursor()
 config = cursor.execute('select * from "Bot Config"').fetchall()[0]
 connection.close()
 
+# Get the Image and videos location and the text of the post
 def GetPostandImage():
+
+    # call the dialogue box to write a custom text/post 
     PostBox("Enter Your Post")
-    Post, Image = str(clip.paste()).split("+")
-    return Post, Image
+
+    # Get the text locations and post text 
+    Post, Image, Videos = str(clip.paste()).split("+")
+    return Post, Image, Videos
     
-def GetPlatforms(Image):
-    PlatformsToUpload(Image)
+# Get all the Installed Platforms 
+def GetPlatforms(length):
+
+    # Get the Installed Apps 
+    PlatformsToUpload(length)
+
+    # Get the Platforms Names as a list in a variable 
     PlatformsUpload = str(clip.paste()).split("+")[:-1]
     return PlatformsUpload
 
-
+# Get the Platform Image locations 
 def GetPlatformsImages():
+
+    # Create a Dialogue box with all the platforms that are enabled to upload Images in that 
     PlatformsToUploadImages()
+
+    # Get the Platforms in the Variable as a list 
     PlatformsUpload = str(clip.paste()).split("+")[:-1]
     return PlatformsUpload
 
 def Post():
+    # Declaring Blank Variables to use it in future 
     Post = None
     Image = None
-    PlatformsToUploadImagess = None
-    PlatformsToUploads = None
+    Videos = None
+
     try:
-        Post, Image = GetPostandImage()
-        PlatformsToUploads = GetPlatforms(Image)
-        if Image == "":
+        # Get the Post Text and Image Location 
+        Post, Image, Videos = GetPostandImage()
+
+        # Get the platforms on which Images and Videos locations 
+        PlatformsToUploads = GetPlatforms(len(Image))
+
+        # Double Check if the values are blank the get the locations again
+        if Image == "" or Videos == "" or Image == None or Videos == None:
             PlatformsToUploadImagess = []
         else:
             PlatformsToUploadImagess = GetPlatformsImages()
     except:
+
+        # Exit if any other issue occurs
         SystemExit()
     finally:
-        if Post != None or Image != None:
-            PostOnSocials(Post, Image, PlatformsToUploadImagess, PlatformsToUploads)
+
+        # If Everything is done correctly then have a safty check and then perform the actions
+        if Post != None or Image != None or Videos != None or Post != "" or Image != "" or Videos != "":
+            PostOnSocials(Post, Image, Videos, PlatformsToUploadImagess, PlatformsToUploads)
     
 
-def PostOnSocials(Message, LocationOfImage, PlatformsToUploadImagess, PlatformsToUploads):
+# Post to Social Media 
+def PostOnSocials(Message, LocationOfImage, LocationOfVideos, PlatformsToUploadImagess, PlatformsToUploads):
+
+    # Creating blank lists to use in future 
     channels = []
     toUpload = []
+
+    # Filter and Call the specific methods to upload on it 
     try:
         for i in PlatformsToUploads:
             if i == "Reddit":
                 title = pg.prompt("Enter the Title for Reddit",
                                 "Enter the title for Reddit")
                 if "Reddit" in PlatformsToUploadImagess:
-                    if len(Message) != 0 and LocationOfImage != "":
+                    if len(Message) != 0 and LocationOfImage != "" or LocationOfVideos != None:
                         choice = pg.confirm("Can't Upload Image and Post at same time on Reddit ( Beyond the Rules of Reddit )", "Error", buttons=[
                                             "Disable Post Text", "Disable Image Upload"])
                         if choice == "Disable Post Text":
@@ -76,25 +102,56 @@ def PostOnSocials(Message, LocationOfImage, PlatformsToUploadImagess, PlatformsT
                     toUpload.append(f'{i}NI')
                 GetRedditSub(GetRedditTags())
                 subReddits = str(clip.paste()).split("+")[:-1]
+
+            # If the Platform selected is Twitter then perform this action 
             if i == "Twitter":
+
+                # If the Message/Post is less than 270 charecters then add the hashtags to the text post 
                 if len(Message) < 270:
+
+                    # Add the hashtags and return the text post in a variable 
                     TwitterPost = AddHashtagsToPost(Message)
+
                 else:
+
+                    # Append the Hashtags to the Twitter Posts 
                     TwitterPost = Message
+
+                # Update the toUpload list to state that the twitter post is ready to be uploaded 
                 toUpload.append(i)
+
+            # Perform the specific actions if the selected platform is Discord 
             if i == 'Discord':
+
+                # Append the platform in the toUpload list to indicate that the platform is ready to upload all the posts on the channels 
                 toUpload.append(i)
+
+                # Making a DB connection to fetch the channels 
                 connection = sqlite3.connect('AutoPoster.db')
                 cursor = connection.cursor()
                 discord = cursor.execute('select * from Discord').fetchall()
+
+                # Creaating a Discord Config variable to use in future 
                 discordConfig = []
+
+                # If the Selected channel is avaiable in the discord config then list it in the postbox 
                 for i in discord:
                     discordConfig.append(i[3])
+                
+                # Make the user to select the channels in which the auto Poster have to Upload the PostBox 
                 MultiPurposeOptionBox("Select on which Channels you want to send Message", discordConfig,
                                       "Discord App has been currupted in you local machine ( Please Re-install the app again from App Management )")
+                
+                # Get the Channels which the user have selected and store them in the list 
                 channels = str(clip.paste()).split("+")
+
+                # Remove the last channel as it have a un-necessary stuff in the last item 
                 channels = channels[:-1]
+
+                # close the database connection which we created at the start 
                 connection.close()
+
+                
             if i == 'Instagram':
                 toUpload.append(i)
                 connection = sqlite3.connect('AutoPoster.db')
@@ -117,15 +174,15 @@ def PostOnSocials(Message, LocationOfImage, PlatformsToUploadImagess, PlatformsT
             pg.alert(
                 "Uploading Status/Post/Tweet to the Selected Platforms\n\nPlease Wait", config[0])
         if "Twitter" in toUpload:
-            UploadToTwitter(TwitterPost, LocationOfImage)
+            UploadToTwitter(TwitterPost, LocationOfImage, LocationOfVideos)
         if "Discord" in toUpload:
-            sendDiscordMessage(Message, LocationOfImage, discordConfig, channels)
+            sendDiscordMessage(Message, LocationOfImage, LocationOfVideos, discordConfig, channels)
         if "RedditDPT" in toUpload:
             Upload(title=title, message="",
-                   pathOfImage=LocationOfImage)
+                   pathOfImage=LocationOfImage, pathOfVideos=LocationOfVideos)
         if "RedditDIU" in toUpload or "RedditNI" in toUpload:
             Upload(title=title, message=Message,
                    pathOfImage="", subReddits=subReddits)
         if "Instagram" in toUpload:
-            UploadTOIG(LocationOfImage, Message, accounts)
+            UploadTOIG(LocationOfImage, LocationOfVideos, Message, accounts)
         pg.alert("Sucessfully Uploaded the Tweet/Status to every Playform", config[0])

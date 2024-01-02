@@ -4,18 +4,18 @@ from BotVersion import BotVersion as version
 import sqlite3
 from components.Module_Installer.main import InstallAllModules
 from components.Update_Script.main import Update, checkUpdateAndUpdate
+# import pymsgbox as pg
 
 try:
     import pymsgbox as pg
 except ModuleNotFoundError:
     InstallAllModules()
 
-checkUpdateAndUpdate()
-CheckForDevAccounts()
-
 connection = sqlite3.connect('AutoPoster.db')
 cursor = connection.cursor()
 DataBase.CheckOrCreateDefault()
+checkUpdateAndUpdate()
+CheckForDevAccounts()
 import components.Post.Post
 from components.App.AppManagement import getApps
 
