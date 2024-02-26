@@ -151,32 +151,59 @@ def PostOnSocials(Message, LocationOfImage, LocationOfVideos, PlatformsToUploadI
                 # close the database connection which we created at the start 
                 connection.close()
 
-                
+
+            # If Selected Platform is Instagram then perform these actions   
             if i == 'Instagram':
+
+                # Append the selected platform to confirm the upload to happen 
                 toUpload.append(i)
+
+                # make connection to DataBase and get the Instagram Details from DataBase 
                 connection = sqlite3.connect('AutoPoster.db')
                 cursor = connection.cursor()
                 ig = cursor.execute('select * from Instagram').fetchall()
+
+                # Create a blank variable to use it for further use 
                 credConfig = []
+
+                # Get all the Configured Instagram Accounts to make user to select accounts 
                 for i in ig:
                     credConfig.append(i[0])
+
+                # Ask user to select on which Instagram account he wants to Upload 
                 MultiPurposeOptionBox("Select on which Account you want to Upload Image", credConfig,
                                       "Instagram App has been currupted in you local machine ( Please Re-install the app again from App Management )")
+                
+                # Store the user choice in a list after removing the last item as it's a extra useless item 
                 account = str(clip.paste()).split("+")
                 accounts = account[:-1]
+
+                # close the Database connection 
                 connection.close()
+
+    # After Performing all the platform specific actions finally upload the posts on user dezired platform using the list we were creating 
     finally:
+
+        # If the list is empty exit straight away
         if len(toUpload) == 0:
             pg.alert(
                 "Status/Post/Tweet wasn't sent as Platform wasn't specified", config[0])
             exit()
+
+        # else display a tkinter msg that the posts are being uploaded 
         else:
             pg.alert(
                 "Uploading Status/Post/Tweet to the Selected Platforms\n\nPlease Wait", config[0])
+            
+        # if Twitter is in the list then upload the posts with the performed actions to twitter 
         if "Twitter" in toUpload:
             UploadToTwitter(TwitterPost, LocationOfImage, LocationOfVideos)
+
+        # If Discord is in the list then upload the posts with the performed actions to Discord 
         if "Discord" in toUpload:
             sendDiscordMessage(Message, LocationOfImage, LocationOfVideos, discordConfig, channels)
+
+        # If Reddit is the the 
         if "RedditDPT" in toUpload:
             Upload(title=title, message="",
                    pathOfImage=LocationOfImage, pathOfVideos=LocationOfVideos)
