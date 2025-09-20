@@ -8,7 +8,7 @@ colorama==0.4.6
 cryptography==44.0.1
 exceptiongroup==1.1.0
 h11==0.16.0
-idna==3.4
+idna==3.7
 oauthlib==3.2.2
 outcome==1.2.0
 packaging==23.0
