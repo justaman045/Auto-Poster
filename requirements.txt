@@ -7,7 +7,7 @@ charset-normalizer==3.0.1
 colorama==0.4.6
 cryptography==39.0.0
 exceptiongroup==1.1.0
-h11==0.14.0
+h11==0.16.0
 idna==3.4
 oauthlib==3.2.2
 outcome==1.2.0
