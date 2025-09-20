@@ -35,7 +35,7 @@ trio==0.22.0
 trio-websocket==0.9.2
 tweepy==4.12.1
 update-checker==0.18.0
-urllib3==1.26.14
+urllib3==2.5.0
 webdriver-manager==3.8.5
 websocket-client==1.5.0
 wsproto==1.2.0
